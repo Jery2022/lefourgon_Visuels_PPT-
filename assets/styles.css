@@ -15,6 +15,12 @@
   --gy: #f4f2ed;
   --lt: #ffffff;
   --brd: #e0e0e0;
+  --surface: rgba(255, 255, 255, 0.82);
+  --border: rgba(216, 211, 200, 0.9);
+  --text: #2d2d2d;
+  --radius-lg: 24px;
+  --radius-md: 18px;
+  --shadow-soft: 0 14px 34px rgba(0, 0, 0, 0.04);
 }
 
 * {
@@ -62,6 +68,10 @@ a {
   text-decoration: none;
 }
 
+body.presentation-mode {
+  overflow-x: hidden;
+}
+
 .page-transition {
   position: fixed;
   inset: 0 auto auto 0;
@@ -100,55 +110,7 @@ header {
   color: white;
 }
 
-/* NAV */
-.immersive-nav {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background: rgba(236, 234, 228, 0.95);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(216, 211, 200, 0.8);
-}
-
-@supports (-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px)) {
-  .immersive-nav {
-    background: rgba(236, 234, 228, 0.82);
-  }
-
-  .page-section--final .page-section__header,
-  .page-fnav,
-  .page-section__block,
-  .page-view,
-  .m-hero-tag,
-  .d-hero-tag {
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
-  }
-}
-
-.immersive-nav-inner {
-  display: flex;
-  gap: 10px;
-  padding: 14px;
-}
-
-.nav-btn {
-  flex: 1;
-  padding: 12px;
-  border: none;
-  background: transparent;
-  font-weight: 600;
-  cursor: pointer;
-  border-radius: 10px;
-}
-
-.nav-btn.active {
-  background: var(--vf);
-  color: white;
-}
-
-/* APP CONTENT */
+/* LAYOUT */
 #app-content {
   min-height: 80vh;
   padding: 40px;
@@ -156,22 +118,6 @@ header {
 
 #app-content > * {
   width: 100%;
-}
-
-/* TRANSITION */
-.page-transition.active {
-  opacity: 1;
-  pointer-events: all;
-}
-
-/* PRESENTATION MODE */
-body.presentation-mode header,
-body.presentation-mode .hero {
-  display: none;
-}
-
-body.presentation-mode #app-content {
-  padding-top: 20px;
 }
 
 .page-shell {
@@ -218,7 +164,7 @@ body.presentation-mode #app-content {
 .page-card {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 18px;
+  border-radius: var(--radius-md);
   padding: 24px;
   box-shadow: var(--shadow-soft);
 }
@@ -230,6 +176,108 @@ body.presentation-mode #app-content {
 
 .page-card__text {
   color: rgba(28, 28, 28, 0.8);
+}
+
+/* NAV */
+.immersive-nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(236, 234, 228, 0.95);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(216, 211, 200, 0.8);
+}
+
+@supports (-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px)) {
+  .immersive-nav {
+    background: rgba(236, 234, 228, 0.82);
+  }
+}
+
+.immersive-nav-inner {
+  display: flex;
+  gap: 10px;
+  padding: 14px;
+}
+
+.nav-btn {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  background: transparent;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.nav-btn.active {
+  background: var(--vf);
+  color: white;
+}
+
+.page-transition.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* PRESENTATION MODE */
+body.presentation-mode header,
+body.presentation-mode .hero {
+  display: none;
+}
+
+body.presentation-mode #app-content {
+  padding-top: 20px;
+}
+
+.page-section--ux .page-card {
+  border-left: 5px solid var(--vf);
+}
+
+.page-section--mockups .page-card {
+  border-left: 5px solid var(--am);
+}
+
+.page-section--final .page-card {
+  border-left: 5px solid #0f4a27;
+}
+
+.page-grid--reference {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.page-card--feature {
+  display: grid;
+  gap: 10px;
+  min-height: 100%;
+}
+
+.page-card__kicker {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--am);
+}
+
+.page-section--final .page-card__title {
+  font-family: "Fraunces", serif;
+  font-size: 1.35rem;
+}
+
+.page-section--final .page-card__text {
+  line-height: 1.7;
+}
+
+.page-section--final .page-card__text ul,
+.page-section--final .page-card__text ol {
+  margin-left: 1.25rem;
+  padding-left: 0.5rem;
+}
+
+.page-section--final .page-card__text li + li {
+  margin-top: 0.35rem;
 }
 
 .page-section--ux .page-card {
@@ -298,6 +346,21 @@ body.presentation-mode #app-content {
   border: 1px solid rgba(216, 211, 200, 0.9);
   border-radius: 24px;
   box-shadow: 0 18px 40px rgba(15, 74, 39, 0.08);
+}
+
+.page-fnav-wrap {
+  margin-bottom: 28px;
+}
+
+.page-fnav {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(216, 211, 200, 0.9);
+  border-radius: 18px;
+  box-shadow: var(--shadow-soft);
 }
 
 .page-pills {
@@ -1307,25 +1370,5 @@ a:focus-visible {
     position: sticky;
     bottom: 0;
     z-index: 5;
-  }
-}
-
-@media (max-width: 768px) {
-  header,
-  #app-content {
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-
-  .immersive-nav-inner {
-    flex-direction: column;
-  }
-
-  .hero {
-    padding: 56px 16px;
-  }
-
-  .page-grid {
-    grid-template-columns: 1fr;
   }
 }
