@@ -23,19 +23,37 @@ async function loadPage(key, btn) {
   overlay.classList.add("active");
   overlay.setAttribute("aria-hidden", "false");
 
-  const res = await fetch(url);
-  const html = await res.text();
+  try {
+    const res = await fetch(url);
 
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(html, "text/html");
+    if (!res.ok) {
+      throw new Error(`Failed to load ${url}: ${res.status}`);
+    }
 
-  container.innerHTML = doc.body.innerHTML.trim();
-  container.querySelectorAll("script").forEach((script) => script.remove());
+    const html = await res.text();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
 
-  setTimeout(() => {
-    overlay.classList.remove("active");
-    overlay.setAttribute("aria-hidden", "true");
-  }, 300);
+    container.innerHTML = doc.body.innerHTML.trim();
+    container.querySelectorAll("script").forEach((script) => script.remove());
+  } catch (error) {
+    container.innerHTML = `
+      <div class="page-shell">
+        <section class="page-section">
+          <div class="page-card">
+            <div class="page-card__kicker">Erreur de chargement</div>
+            <h2 class="page-card__title">Impossible de charger la page demandée</h2>
+            <p class="page-card__text">${error.message}</p>
+          </div>
+        </section>
+      </div>
+    `;
+  } finally {
+    setTimeout(() => {
+      overlay.classList.remove("active");
+      overlay.setAttribute("aria-hidden", "true");
+    }, 300);
+  }
 }
 
 async function togglePresentationMode() {
@@ -44,10 +62,19 @@ async function togglePresentationMode() {
 
   document.body.classList.toggle("presentation-mode", !isFullscreen);
 
-  if (!isFullscreen) {
-    await document.documentElement.requestFullscreen();
-  } else {
-    await document.exitFullscreen();
+  try {
+    if (!isFullscreen) {
+      if (document.documentElement.requestFullscreen) {
+        await document.documentElement.requestFullscreen();
+      }
+    } else if (document.exitFullscreen) {
+      await document.exitFullscreen();
+    }
+  } catch (error) {
+    document.body.classList.remove("presentation-mode");
+    if (presentationButton) {
+      presentationButton.setAttribute("aria-pressed", "false");
+    }
   }
 }
 
@@ -57,16 +84,21 @@ document.querySelectorAll(".nav-btn").forEach((button) => {
   });
 });
 
-document
-  .getElementById("presentation-toggle")
-  .addEventListener("click", togglePresentationMode);
+const presentationToggle = document.getElementById("presentation-toggle");
+
+if (presentationToggle) {
+  presentationToggle.addEventListener("click", togglePresentationMode);
+}
 
 document.addEventListener("fullscreenchange", () => {
   const presentationButton = document.getElementById("presentation-toggle");
   const isFullscreen = Boolean(document.fullscreenElement);
 
   document.body.classList.toggle("presentation-mode", isFullscreen);
-  presentationButton.setAttribute("aria-pressed", String(isFullscreen));
+
+  if (presentationButton) {
+    presentationButton.setAttribute("aria-pressed", String(isFullscreen));
+  }
 });
 
 loadPage("ux", document.querySelector('.nav-btn[data-page="ux"]'));
