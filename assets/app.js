@@ -8,6 +8,7 @@ async function loadPage(key, btn) {
   const url = routes[key];
   const container = document.getElementById("app-content");
   const overlay = document.getElementById("transition");
+  if (!url || !container || !overlay) return;
 
   document.querySelectorAll(".nav-btn").forEach((b) => {
     b.classList.remove("active");
@@ -28,7 +29,8 @@ async function loadPage(key, btn) {
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, "text/html");
 
-  container.innerHTML = doc.body.innerHTML;
+  container.innerHTML = doc.body.innerHTML.trim();
+  container.querySelectorAll("script").forEach((script) => script.remove());
 
   setTimeout(() => {
     overlay.classList.remove("active");
