@@ -32,24 +32,37 @@
       <h1>Stratégie digitale - Le Fourgon</h1>
     </section>
 
-    <nav class="immersive-nav" aria-label="Navigation de la présentation">
-      <div class="immersive-nav-inner">
-        <button
-          type="button"
-          class="nav-btn active"
-          data-page="ux"
-          aria-current="page"
-        >
-          UX
-        </button>
-        <button type="button" class="nav-btn" data-page="mockups">
-          Mockups
-        </button>
-        <button type="button" class="nav-btn" data-page="final">Final</button>
-      </div>
-    </nav>
-
-    <main id="app-content" aria-live="polite"></main>
+    <main id="app-content" aria-live="polite">
+      <section class="page-selector" aria-label="Pages de maquettes">
+        <div class="page-selector__intro">
+          <h2>Maquettes finales</h2>
+          <p>
+            Sélectionnez une page pour l’afficher dans la zone centrale. Les
+            maquettes restent indépendantes et sont chargées sans modification
+            de leur contenu.
+          </p>
+        </div>
+        <div class="page-selector__actions">
+          <button
+            type="button"
+            class="nav-btn active"
+            data-page="ux"
+            aria-current="page"
+          >
+            UX
+          </button>
+          <button type="button" class="nav-btn" data-page="mockups">
+            Mockups
+          </button>
+          <button type="button" class="nav-btn" data-page="final">Final</button>
+        </div>
+      </section>
+      <section
+        id="page-host"
+        class="page-host"
+        aria-label="Aperçu de la page sélectionnée"
+      ></section>
+    </main>
 
     <button type="button" id="presentation-toggle" aria-pressed="false">
       Mode présentation plein écran
