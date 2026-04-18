@@ -42,9 +42,13 @@
 
     <div class="page-fnav-wrap">
       <div class="page-fnav">
-        <button class="page-fnav-btn on">01 — Homepage</button>
-        <button class="page-fnav-btn">02 — Catalogue & Fiche produit</button>
-        <button class="page-fnav-btn">03 — Landing BtoB Pro</button>
+        <button class="page-fnav-btn on" data-page="home">01 — Homepage</button>
+        <button class="page-fnav-btn" data-page="catalogue">
+          02 — Catalogue & Fiche produit
+        </button>
+        <button class="page-fnav-btn" data-page="btob">
+          03 — Landing BtoB Pro
+        </button>
       </div>
     </div>
 
@@ -142,11 +146,11 @@
                       </svg>
                     </div>
                     <div class="m-ctas">
-                      <button class="m-cta-p">
+                      <button class="m-cta-p js-btocta" type="button">
                         🛒 Commander pour ma maison
                         <span class="m-cta-tag">BtoC</span>
                       </button>
-                      <button class="m-cta-s">
+                      <button class="m-cta-s js-btocta" type="button">
                         🏢 Solution pour mon entreprise
                         <span
                           style="background: var(--bc); color: var(--bb)"
@@ -175,7 +179,12 @@
                             </div>
                             <div class="m-prod-footer">
                               <div class="m-prod-price">2,80€</div>
-                              <button class="m-prod-add">+</button>
+                              <button
+                                class="m-prod-add js-add-to-cart"
+                                type="button"
+                              >
+                                +
+                              </button>
                             </div>
                           </div>
                         </div>
@@ -191,7 +200,12 @@
                             </div>
                             <div class="m-prod-footer">
                               <div class="m-prod-price">1,20€</div>
-                              <button class="m-prod-add">+</button>
+                              <button
+                                class="m-prod-add js-add-to-cart"
+                                type="button"
+                              >
+                                +
+                              </button>
                             </div>
                           </div>
                         </div>
@@ -205,7 +219,12 @@
                             <div class="m-prod-vol">75cl · Vergers locaux</div>
                             <div class="m-prod-footer">
                               <div class="m-prod-price">4,20€</div>
-                              <button class="m-prod-add">+</button>
+                              <button
+                                class="m-prod-add js-add-to-cart"
+                                type="button"
+                              >
+                                +
+                              </button>
                             </div>
                           </div>
                         </div>

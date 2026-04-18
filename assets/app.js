@@ -24,18 +24,29 @@ async function loadPage(key, btn) {
   overlay.setAttribute("aria-hidden", "false");
 
   try {
-    const res = await fetch(url);
+    let html = "";
 
-    if (!res.ok) {
-      throw new Error(`Failed to load ${url}: ${res.status}`);
+    if (location.protocol === "file:") {
+      const fs = await fetch(`./${url}`).catch(() => null);
+      if (!fs || !fs.ok) {
+        throw new Error(`Impossible de charger ${url} en file://`);
+      }
+      html = await fs.text();
+    } else {
+      const res = await fetch(url);
+      if (!res.ok) {
+        throw new Error(`Failed to load ${url}: ${res.status}`);
+      }
+      html = await res.text();
     }
 
-    const html = await res.text();
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, "text/html");
 
     container.innerHTML = doc.body.innerHTML.trim();
     container.querySelectorAll("script").forEach((script) => script.remove());
+
+    wireFinalPageInteractions(container);
   } catch (error) {
     container.innerHTML = `
       <div class="page-shell">
@@ -76,6 +87,48 @@ async function togglePresentationMode() {
       presentationButton.setAttribute("aria-pressed", "false");
     }
   }
+}
+
+function wireFinalPageInteractions(root) {
+  if (!root) return;
+
+  root.querySelectorAll(".page-fnav-btn").forEach((button) => {
+    button.addEventListener("click", () => {
+      const target = button.dataset.page;
+      const sections = root.querySelectorAll(".page-section__block");
+      const buttons = root.querySelectorAll(".page-fnav-btn");
+      const indexMap = { home: 0, catalogue: 1, btob: 2 };
+      const index = indexMap[target];
+
+      buttons.forEach((btn) => btn.classList.remove("on"));
+      button.classList.add("on");
+
+      sections.forEach((section, i) => {
+        section.style.display = i === index ? "" : "none";
+      });
+    });
+  });
+
+  root.querySelectorAll(".d-filter, .m-filter-chip").forEach((button) => {
+    button.addEventListener("click", () => {
+      const group = button.parentElement;
+      if (!group) return;
+      group
+        .querySelectorAll(".d-filter, .m-filter-chip")
+        .forEach((btn) => btn.classList.remove("on"));
+      button.classList.add("on");
+    });
+  });
+
+  root
+    .querySelectorAll(
+      ".js-btocta, .js-btob-devis, .js-btob-login, .js-btob-form, .js-add-to-cart",
+    )
+    .forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+      });
+    });
 }
 
 document.querySelectorAll(".nav-btn").forEach((button) => {
