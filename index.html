@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Présentation interactive de la stratégie digitale Le Fourgon avec navigation immersive et mode plein écran."
+    />
+    <title>Le Fourgon — Stratégie digitale interactive</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=DM+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body>
+    <div
+      class="page-transition"
+      id="transition"
+      aria-live="polite"
+      aria-hidden="true"
+    >
+      Chargement...
+    </div>
+
+    <header>
+      <p>Le Fourgon</p>
+    </header>
+
+    <section class="hero">
+      <h1>Stratégie digitale - Le Fourgon</h1>
+    </section>
+
+    <nav class="immersive-nav" aria-label="Navigation de la présentation">
+      <div class="immersive-nav-inner">
+        <button
+          type="button"
+          class="nav-btn active"
+          data-page="ux"
+          aria-current="page"
+        >
+          UX
+        </button>
+        <button type="button" class="nav-btn" data-page="mockups">
+          Mockups
+        </button>
+        <button type="button" class="nav-btn" data-page="final">Final</button>
+      </div>
+    </nav>
+
+    <main id="app-content" aria-live="polite"></main>
+
+    <button type="button" id="presentation-toggle" aria-pressed="false">
+      Mode présentation plein écran
+    </button>
+    <noscript
+      >Cette présentation interactive nécessite JavaScript pour fonctionner
+      correctement.</noscript
+    >
+
+    <script src="assets/app.js"></script>
+  </body>
+</html>
