@@ -95,16 +95,25 @@ function wireFinalPageInteractions(root) {
   root.querySelectorAll(".page-fnav-btn").forEach((button) => {
     button.addEventListener("click", () => {
       const target = button.dataset.page;
-      const sections = root.querySelectorAll(".page-section__block");
-      const buttons = root.querySelectorAll(".page-fnav-btn");
-      const indexMap = { home: 0, catalogue: 1, btob: 2 };
-      const index = indexMap[target];
+      const sections = [
+        root.querySelector("#page-home"),
+        root.querySelector("#page-catalogue"),
+        root.querySelector("#page-btob"),
+      ].filter(Boolean);
 
-      buttons.forEach((btn) => btn.classList.remove("on"));
+      root.querySelectorAll(".page-fnav-btn").forEach((btn) => {
+        btn.classList.remove("on");
+        btn.setAttribute("aria-pressed", "false");
+      });
+
       button.classList.add("on");
+      button.setAttribute("aria-pressed", "true");
 
-      sections.forEach((section, i) => {
-        section.style.display = i === index ? "" : "none";
+      sections.forEach((section) => {
+        section.classList.toggle(
+          "page-section--hidden",
+          section.id !== `page-${target}`,
+        );
       });
     });
   });
@@ -113,20 +122,24 @@ function wireFinalPageInteractions(root) {
     button.addEventListener("click", () => {
       const group = button.parentElement;
       if (!group) return;
-      group
-        .querySelectorAll(".d-filter, .m-filter-chip")
-        .forEach((btn) => btn.classList.remove("on"));
+      group.querySelectorAll(".d-filter, .m-filter-chip").forEach((btn) => {
+        btn.classList.remove("on");
+        btn.setAttribute("aria-pressed", "false");
+      });
       button.classList.add("on");
+      button.setAttribute("aria-pressed", "true");
     });
   });
 
   root
     .querySelectorAll(
-      ".js-btocta, .js-btob-devis, .js-btob-login, .js-btob-form, .js-add-to-cart",
+      ".js-btocta, .js-btob-devis, .js-btob-login, .js-btob-form, .js-add-to-cart, .m-cta-p, .m-cta-s, .d-hero-btn-p, .d-hero-btn-s, .d-prod-add, .m-prod-add, .d-devis-btn, .m-btob-cta-p, .m-btob-cta-s, .m-btob-form-btn, .d-btob-cta, .d-btob-hero-btn-p, .d-btob-hero-btn-s, .d-form-btn, .m-fiche-cta, .d-fiche-cta2, .d-fiche-wl, .page-fnav-btn",
     )
     .forEach((button) => {
       button.addEventListener("click", (event) => {
-        event.preventDefault();
+        if (button.tagName === "BUTTON" || button.tagName === "A") {
+          event.preventDefault();
+        }
       });
     });
 }
@@ -155,3 +168,10 @@ document.addEventListener("fullscreenchange", () => {
 });
 
 loadPage("ux", document.querySelector('.nav-btn[data-page="ux"]'));
+
+document.addEventListener("DOMContentLoaded", () => {
+  const initialButton = document.querySelector('.nav-btn[data-page="ux"]');
+  if (initialButton) {
+    loadPage("ux", initialButton);
+  }
+});

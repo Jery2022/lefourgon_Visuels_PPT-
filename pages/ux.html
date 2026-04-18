@@ -1,519 +1,1384 @@
-<div class="page-shell">
-  <section class="page-section page-section--ux">
-    <div class="page-section__header">
-      <p class="page-section__eyebrow">Phase UX</p>
-      <h2 class="page-section__title">Démarche UX</h2>
-      <p class="page-section__intro">
-        Contenu UX chargé en HTML statique, avec une structure prête à être
-        stylée par la feuille CSS globale.
-      </p>
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,400&family=DM+Sans:wght@400;500;600&display=swap");
+  :root {
+    --vf: #1a6b3a;
+    --vs: #2e8b57;
+    --vc: #d6ead8;
+    --cr: #f9f5ee;
+    --bn: #6b4c2a;
+    --am: #d97706;
+    --bb: #1e5799;
+    --bc: #d5e8f0;
+    --gr: #2d2d2d;
+    --gy: #f4f2ed;
+  }
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    font-family: "DM Sans", sans-serif;
+    background: var(--gy);
+    color: var(--gr);
+  }
+
+  .ux-shell {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 3rem;
+  }
+
+  .phase-nav {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 0;
+  }
+  .pnav-btn {
+    font-family: "DM Sans", sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 9px 18px;
+    border: none;
+    background: transparent;
+    color: #888;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    border-radius: 4px 4px 0 0;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .pnav-btn:hover {
+    color: var(--vf);
+    background: var(--vc);
+  }
+  .pnav-btn.active {
+    color: var(--vf);
+    border-bottom-color: var(--vf);
+    font-weight: 600;
+  }
+
+  .panel {
+    display: none;
+  }
+  .panel.active {
+    display: block;
+  }
+
+  .sec-intro {
+    background: white;
+    border-radius: 10px;
+    border-left: 4px solid var(--vf);
+    padding: 14px 18px;
+    margin-bottom: 24px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .sec-intro-icon {
+    font-size: 22px;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .sec-intro h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--vf);
+    margin-bottom: 3px;
+  }
+  .sec-intro p {
+    font-size: 12.5px;
+    color: #666;
+    line-height: 1.6;
+  }
+
+  .fmt-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 20px;
+    background: white;
+    border-radius: 8px;
+    padding: 4px;
+    border: 0.5px solid #e0e0e0;
+    width: fit-content;
+  }
+  .fmt-btn {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 14px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 6px;
+    color: #888;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .fmt-btn:hover {
+    background: var(--vc);
+    color: var(--vf);
+  }
+  .fmt-btn.active {
+    background: var(--vf);
+    color: white;
+  }
+
+  .devices-row {
+    display: flex;
+    gap: 28px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+  .device-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .device-lbl {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gr);
+    text-align: center;
+  }
+  .device-sub {
+    font-size: 10px;
+    color: #999;
+    margin-top: -5px;
+    text-align: center;
+  }
+
+  .phone {
+    width: 220px;
+    border-radius: 28px;
+    border: 6px solid #1a1a1a;
+    background: #1a1a1a;
+    overflow: hidden;
+    position: relative;
+  }
+  .phone-notch {
+    height: 20px;
+    background: #1a1a1a;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .phone-notch::after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 12px;
+    background: #1a1a1a;
+    border-radius: 0 0 8px 8px;
+  }
+  .phone-screen {
+    background: var(--cr);
+    overflow: hidden;
+  }
+
+  .tablet {
+    width: 320px;
+    border-radius: 16px;
+    border: 6px solid #2a2a2a;
+    background: #2a2a2a;
+    overflow: hidden;
+  }
+  .tablet-notch {
+    height: 14px;
+    background: #2a2a2a;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+  }
+  .tablet-cam {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #555;
+  }
+  .tablet-screen {
+    background: var(--cr);
+    overflow: hidden;
+  }
+
+  .desktop-frame {
+    width: 100%;
+    border-radius: 8px;
+    border: 4px solid #2a2a2a;
+    background: #2a2a2a;
+    overflow: hidden;
+  }
+  .desktop-bar {
+    height: 26px;
+    background: #e0e0e0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 10px;
+  }
+  .desktop-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+  }
+  .desktop-url {
+    flex: 1;
+    background: white;
+    border-radius: 3px;
+    height: 14px;
+    font-size: 9px;
+    color: #888;
+    display: flex;
+    align-items: center;
+    padding: 0 6px;
+    margin: 0 8px;
+  }
+  .desktop-screen {
+    background: var(--cr);
+    overflow: hidden;
+  }
+
+  .zone-block {
+    background: white;
+    border: 1.5px dashed #ccc;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 10px;
+    color: #555;
+    font-weight: 500;
+    line-height: 1.3;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .zone-block:hover {
+    border-color: var(--vf);
+    background: var(--vc);
+  }
+  .zone-block.z-header {
+    background: var(--vf);
+    color: white;
+    border-color: var(--vf);
+    font-weight: 600;
+  }
+  .zone-block.z-hero {
+    background: #2e8b57;
+    color: white;
+    border-color: #2e8b57;
+  }
+  .zone-block.z-impact {
+    background: var(--am);
+    color: white;
+    border-color: var(--am);
+  }
+  .zone-block.z-cta {
+    background: var(--vf);
+    color: white;
+    border-color: var(--vf);
+  }
+  .zone-block.z-nav {
+    background: #1a1a1a;
+    color: white;
+    border-color: #1a1a1a;
+  }
+  .zone-block.z-b2b {
+    background: var(--bb);
+    color: white;
+    border-color: var(--bb);
+  }
+  .zone-block.z-footer {
+    background: #2a2a2a;
+    color: white;
+    border-color: #2a2a2a;
+  }
+  .zone-block.z-section {
+    background: var(--vc);
+    color: var(--vf);
+    border-color: var(--vc);
+    border-style: solid;
+  }
+  .zone-block.z-card {
+    background: white;
+    border: 1.5px solid #e0e0e0;
+    color: #555;
+  }
+
+  .wf-header {
+    background: var(--vf);
+    padding: 7px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .wf-logo {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .wf-logo-truck {
+    width: 14px;
+    height: 9px;
+    background: white;
+    border-radius: 2px 2px 0 0;
+    position: relative;
+    opacity: 0.9;
+  }
+  .wf-logo-truck::after {
+    content: "";
+    position: absolute;
+    bottom: -3px;
+    left: 2px;
+    width: 4px;
+    height: 4px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 6px 0 0 white;
+  }
+  .wf-logo-txt {
+    font-family: "Fraunces", serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: white;
+  }
+  .wf-burger {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .wf-burger span {
+    display: block;
+    width: 14px;
+    height: 1.5px;
+    background: white;
+    border-radius: 1px;
+  }
+  .wf-trustbar {
+    background: var(--vs);
+    padding: 3px 10px;
+    font-size: 8px;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .wf-stars {
+    color: #fbbf24;
+    font-size: 8px;
+  }
+  .wf-hero {
+    background: linear-gradient(170deg, var(--vf), var(--vs));
+    padding: 14px 10px 12px;
+    position: relative;
+    overflow: hidden;
+  }
+  .wf-hero-deco {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 14px solid rgba(255, 255, 255, 0.07);
+    top: -20px;
+    right: -20px;
+  }
+  .wf-hero h2 {
+    font-family: "Fraunces", serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: white;
+    line-height: 1.2;
+    position: relative;
+  }
+  .wf-hero p {
+    font-size: 8.5px;
+    color: rgba(255, 255, 255, 0.75);
+    margin-top: 3px;
+    position: relative;
+  }
+  .wf-impact-strip {
+    background: var(--am);
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .wf-impact-num {
+    font-family: "Fraunces", serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: white;
+    line-height: 1;
+  }
+  .wf-impact-lbl {
+    font-size: 7px;
+    color: rgba(255, 255, 255, 0.85);
+  }
+  .wf-ctas {
+    padding: 8px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .wf-cta-p {
+    background: var(--vf);
+    color: white;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 7px;
+    border-radius: 5px;
+    text-align: center;
+  }
+  .wf-cta-s {
+    background: white;
+    color: var(--vf);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 6px;
+    border-radius: 5px;
+    text-align: center;
+    border: 1.5px solid var(--vf);
+  }
+  .wf-section-lbl {
+    padding: 7px 10px 3px;
+    font-size: 8.5px;
+    font-weight: 700;
+    color: var(--gr);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+  }
+  .wf-cards-row {
+    display: flex;
+    gap: 6px;
+    padding: 0 10px 8px;
+  }
+  .wf-card {
+    flex: 1;
+    background: white;
+    border-radius: 6px;
+    border: 0.5px solid #e0e0e0;
+    overflow: hidden;
+  }
+  .wf-card-img {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+  .wf-card-img.b {
+    background: #fef9c3;
+  }
+  .wf-card-img.w {
+    background: #e0f2fe;
+  }
+  .wf-card-img.j {
+    background: #fef3c7;
+  }
+  .wf-card-body {
+    padding: 4px 5px 5px;
+  }
+  .wf-card-name {
+    font-size: 7px;
+    font-weight: 600;
+    color: var(--gr);
+    line-height: 1.3;
+  }
+  .wf-card-price {
+    font-size: 8px;
+    font-weight: 700;
+    color: var(--vf);
+    margin-top: 1px;
+  }
+  .wf-card-badge {
+    background: var(--vc);
+    color: var(--vf);
+    font-size: 6px;
+    font-weight: 600;
+    padding: 1px 3px;
+    border-radius: 2px;
+    display: inline-block;
+    margin-top: 1px;
+  }
+  .wf-bottomnav {
+    background: white;
+    border-top: 0.5px solid #e8e8e8;
+    display: flex;
+    justify-content: space-around;
+    padding: 6px 0 8px;
+  }
+  .wf-navitem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    font-size: 7px;
+    color: #bbb;
+  }
+  .wf-navitem.act {
+    color: var(--vf);
+  }
+
+  .wf-tab-header {
+    background: white;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 0.5px solid #e8e8e8;
+  }
+  .wf-tab-logo {
+    font-family: "Fraunces", serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--vf);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .wf-tab-nav {
+    display: flex;
+    gap: 12px;
+    font-size: 10px;
+    color: #666;
+  }
+  .wf-tab-nav span.act {
+    color: var(--vf);
+    font-weight: 600;
+  }
+  .wf-tab-cta {
+    background: var(--am);
+    color: white;
+    font-size: 9px;
+    font-weight: 600;
+    padding: 5px 10px;
+    border-radius: 4px;
+  }
+  .wf-tab-hero {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 12px;
+    padding: 16px;
+    background: var(--cr);
+    align-items: center;
+  }
+  .wf-tab-hero h2 {
+    font-family: "Fraunces", serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--vf);
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+  .wf-tab-hero p {
+    font-size: 9px;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+  .wf-tab-btns {
+    display: flex;
+    gap: 6px;
+  }
+  .wf-tab-btn-p {
+    background: var(--vf);
+    color: white;
+    font-size: 9px;
+    font-weight: 600;
+    padding: 7px 12px;
+    border-radius: 4px;
+    border: none;
+  }
+  .wf-tab-btn-s {
+    background: white;
+    color: var(--vf);
+    font-size: 9px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: 1.5px solid var(--vf);
+  }
+  .wf-tab-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    padding: 12px 16px;
+    background: white;
+  }
+  .wf-tab-card {
+    border-radius: 7px;
+    border: 0.5px solid #e8e8e8;
+    overflow: hidden;
+    background: white;
+  }
+  .wf-tab-card-img {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+  }
+  .wf-tab-card-img.v1 {
+    background: #f0fdf4;
+  }
+  .wf-tab-card-img.v2 {
+    background: #fef9c3;
+  }
+  .wf-tab-card-img.v3 {
+    background: #eff6ff;
+  }
+  .wf-tab-card-body {
+    padding: 6px 8px;
+  }
+  .wf-tab-card-name {
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--gr);
+  }
+  .wf-tab-card-price {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--vf);
+    margin-top: 2px;
+  }
+  .wf-impact-card {
+    background: white;
+    border-radius: 8px;
+    border: 0.5px solid #e0e0e0;
+    padding: 10px;
+    text-align: center;
+  }
+  .wf-impact-big {
+    font-family: "Fraunces", serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--vf);
+    line-height: 1;
+  }
+  .wf-impact-unit {
+    font-size: 8px;
+    color: var(--vs);
+    font-weight: 600;
+  }
+  .wf-impact-desc {
+    font-size: 7.5px;
+    color: #999;
+    margin-top: 2px;
+  }
+
+  .wf-desk-nav {
+    background: white;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    height: 42px;
+    border-bottom: 0.5px solid #ebebeb;
+  }
+  .wf-desk-logo {
+    font-family: "Fraunces", serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--vf);
+    margin-right: 20px;
+  }
+  .wf-desk-links {
+    display: flex;
+    gap: 16px;
+    font-size: 10px;
+    color: #666;
+    flex: 1;
+  }
+  .wf-desk-links span.act {
+    color: var(--vf);
+    font-weight: 600;
+  }
+  .wf-desk-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .wf-desk-tp {
+    font-size: 9px;
+    color: #666;
+  }
+  .wf-desk-cta {
+    background: var(--am);
+    color: white;
+    font-size: 9px;
+    font-weight: 600;
+    padding: 5px 10px;
+    border-radius: 4px;
+  }
+  .wf-desk-hero {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 20px;
+    padding: 24px 20px 18px;
+    background: var(--cr);
+  }
+  .wf-desk-h1 {
+    font-family: "Fraunces", serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--vf);
+    line-height: 1.15;
+    margin-bottom: 8px;
+  }
+  .wf-desk-h1 em {
+    font-style: italic;
+    color: var(--bn);
+  }
+  .wf-desk-p {
+    font-size: 10px;
+    color: #555;
+    line-height: 1.7;
+    margin-bottom: 14px;
+  }
+  .wf-desk-btns {
+    display: flex;
+    gap: 8px;
+  }
+  .wf-desk-btn-p {
+    background: var(--vf);
+    color: white;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 5px;
+    border: none;
+  }
+  .wf-desk-btn-s {
+    background: white;
+    color: var(--vf);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 7px 16px;
+    border-radius: 5px;
+    border: 1.5px solid var(--vf);
+  }
+  .wf-desk-grid-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .wf-desk-impact {
+    background: white;
+    border-radius: 8px;
+    border: 0.5px solid #e0e0e0;
+    padding: 12px;
+    text-align: center;
+  }
+  .wf-desk-impact .big {
+    font-family: "Fraunces", serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--vf);
+    line-height: 1;
+  }
+  .wf-desk-impact .unit {
+    font-size: 9px;
+    color: var(--vs);
+    font-weight: 600;
+    margin-top: 2px;
+  }
+  .wf-desk-impact .desc {
+    font-size: 8px;
+    color: #999;
+    margin-top: 3px;
+    line-height: 1.4;
+  }
+  .wf-desk-prods {
+    padding: 14px 20px;
+    background: white;
+    border-top: 0.5px solid #ebebeb;
+  }
+  .wf-desk-prods-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .wf-desk-prods-title {
+    font-family: "Fraunces", serif;
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .wf-desk-filters {
+    display: flex;
+    gap: 4px;
+  }
+  .wf-desk-filter {
+    font-size: 8.5px;
+    padding: 3px 8px;
+    border-radius: 12px;
+    border: 0.5px solid #ddd;
+    background: white;
+    color: #666;
+  }
+  .wf-desk-filter.act {
+    background: var(--vf);
+    color: white;
+    border-color: var(--vf);
+  }
+  .wf-desk-prod-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+  .wf-desk-prod {
+    border-radius: 7px;
+    border: 0.5px solid #e8e8e8;
+    overflow: hidden;
+  }
+  .wf-desk-prod-img {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+  }
+  .wf-desk-prod-img.d1 {
+    background: #f0fdf4;
+  }
+  .wf-desk-prod-img.d2 {
+    background: #fef9c3;
+  }
+  .wf-desk-prod-img.d3 {
+    background: #eff6ff;
+  }
+  .wf-desk-prod-img.d4 {
+    background: #fff7ed;
+  }
+  .wf-desk-prod-body {
+    padding: 6px 7px 7px;
+  }
+  .wf-desk-prod-name {
+    font-size: 8.5px;
+    font-weight: 600;
+    color: var(--gr);
+  }
+  .wf-desk-prod-badge {
+    background: var(--vc);
+    color: var(--vf);
+    font-size: 6.5px;
+    font-weight: 600;
+    padding: 1px 4px;
+    border-radius: 2px;
+    margin: 3px 0;
+    display: inline-block;
+  }
+  .wf-desk-prod-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .wf-desk-prod-price {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--vf);
+  }
+  .wf-desk-prod-add {
+    width: 16px;
+    height: 16px;
+    background: var(--vf);
+    color: white;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 300;
+    line-height: 1;
+  }
+  .wf-desk-footer {
+    background: var(--vf);
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .wf-desk-footer-logo {
+    font-family: "Fraunces", serif;
+    font-size: 12px;
+    color: white;
+    font-weight: 700;
+  }
+  .wf-desk-footer-links {
+    display: flex;
+    gap: 12px;
+  }
+  .wf-desk-footer-links span {
+    font-size: 8px;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .proto-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .proto-card {
+    background: white;
+    border-radius: 10px;
+    border: 0.5px solid #e0e0e0;
+    padding: 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .proto-card:hover {
+    border-color: var(--vf);
+    background: var(--vc);
+  }
+  .proto-card.sel {
+    border: 2px solid var(--vf);
+    background: var(--vc);
+  }
+  .proto-card-icon {
+    font-size: 18px;
+    margin-bottom: 6px;
+  }
+  .proto-card-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gr);
+    margin-bottom: 3px;
+  }
+  .proto-card-desc {
+    font-size: 10px;
+    color: #888;
+    line-height: 1.5;
+  }
+  .proto-card-badge {
+    display: inline-block;
+    margin-top: 5px;
+    font-size: 9px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 10px;
+  }
+  .proto-card-badge.btoc {
+    background: var(--vc);
+    color: var(--vf);
+  }
+  .proto-card-badge.btob {
+    background: var(--bc);
+    color: var(--bb);
+  }
+
+  .proto-viewer {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .proto-phone-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .proto-steps {
+    flex: 1;
+    min-width: 200px;
+  }
+  .proto-steps-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gr);
+    margin-bottom: 10px;
+  }
+  .step-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    margin-bottom: 6px;
+    background: white;
+    border: 0.5px solid #e0e0e0;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .step-item:hover {
+    border-color: var(--vf);
+  }
+  .step-item.active {
+    background: var(--vc);
+    border-color: var(--vf);
+  }
+  .step-num {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--vc);
+    color: var(--vf);
+    font-size: 10px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .step-item.active .step-num {
+    background: var(--vf);
+    color: white;
+  }
+  .step-content-txt h4 {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gr);
+    margin-bottom: 2px;
+  }
+  .step-content-txt p {
+    font-size: 11px;
+    color: #777;
+    line-height: 1.5;
+  }
+  .step-content-txt .ux-note {
+    font-size: 10px;
+    color: var(--vf);
+    margin-top: 4px;
+    font-style: italic;
+  }
+
+  .proto-screen {
+    background: var(--cr);
+  }
+
+  .checkout-progress {
+    background: white;
+    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    border-bottom: 0.5px solid #f0f0f0;
+  }
+  .cp-step {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 7px;
+  }
+  .cp-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 7px;
+    font-weight: 700;
+  }
+  .cp-dot.done {
+    background: var(--vf);
+    color: white;
+  }
+  .cp-dot.current {
+    background: var(--am);
+    color: white;
+  }
+  .cp-dot.todo {
+    background: #e0e0e0;
+    color: #aaa;
+  }
+  .cp-line {
+    width: 20px;
+    height: 1.5px;
+    background: #e0e0e0;
+  }
+  .cp-line.done {
+    background: var(--vf);
+  }
+  .cp-label {
+    color: #aaa;
+    font-size: 7px;
+  }
+  .cp-label.done {
+    color: var(--vf);
+  }
+  .cp-label.current {
+    color: var(--am);
+    font-weight: 600;
+  }
+
+  .legend-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    color: #555;
+  }
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .scroll-hint {
+    text-align: center;
+    font-size: 10px;
+    color: #999;
+    margin: 8px 0;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%,
+    100% {
+      opacity: 0.5;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+</style>
+
+<div class="ux-shell">
+  <h2 class="sr-only">
+    Démarche UX Le Fourgon — Zonings, Wireframes et Prototypes Mobile First
+  </h2>
+
+  <nav class="phase-nav">
+    <button class="pnav-btn active" onclick="showPanel('demarche', this)">
+      01 — Démarche UX
+    </button>
+    <button class="pnav-btn" onclick="showPanel('zonings', this)">
+      02 — Zonings
+    </button>
+    <button class="pnav-btn" onclick="showPanel('wireframes', this)">
+      03 — Wireframes
+    </button>
+    <button class="pnav-btn" onclick="showPanel('prototypes', this)">
+      04 — Prototypes
+    </button>
+    <button class="pnav-btn" onclick="showPanel('responsive', this)">
+      05 — Responsive
+    </button>
+  </nav>
+
+  <div id="panel-demarche" class="panel active">
+    <div class="sec-intro">
+      <div class="sec-intro-icon">🧭</div>
+      <div>
+        <h3>Méthodologie UX — Mobile First absolu</h3>
+        <p>
+          La démarche UX de Le Fourgon suit un processus en 4 étapes
+          séquentielles : exploration utilisateur → zonings → wireframes →
+          prototypes interactifs. Chaque étape est d'abord réalisée sur mobile
+          (375px), puis déclinée en tablette (768px) et desktop (1280px+).
+        </p>
+      </div>
     </div>
 
-    <div class="page-card">
-      <h3 class="page-card__title">Objectif de la section</h3>
-      <p class="page-card__text">
-        Présenter les choix d’architecture, les parcours utilisateurs et les
-        enseignements clés de la phase UX.
-      </p>
-    </div>
-  </section>
-
-  <section class="ux-shell">
-    <h2 class="sr-only">
-      Démarche UX Le Fourgon — Zonings, Wireframes et Prototypes Mobile First
-    </h2>
-
-    <nav class="phase-nav">
-      <button class="pnav-btn active" onclick="showPanel('demarche', this)">
-        01 — Démarche UX
-      </button>
-      <button class="pnav-btn" onclick="showPanel('zonings', this)">
-        02 — Zonings
-      </button>
-      <button class="pnav-btn" onclick="showPanel('wireframes', this)">
-        03 — Wireframes
-      </button>
-      <button class="pnav-btn" onclick="showPanel('prototypes', this)">
-        04 — Prototypes
-      </button>
-      <button class="pnav-btn" onclick="showPanel('responsive', this)">
-        05 — Responsive
-      </button>
-    </nav>
-
-    <!-- ══════════ PANEL 01 — DÉMARCHE ══════════ -->
-    <div id="panel-demarche" class="panel active">
-      <div class="sec-intro">
-        <div class="sec-intro-icon">🧭</div>
-        <div>
-          <h3>Méthodologie UX — Mobile First absolu</h3>
-          <p>
-            La démarche UX de Le Fourgon suit un processus en 4 étapes
-            séquentielles : exploration utilisateur → zonings → wireframes →
-            prototypes interactifs. Chaque étape est d'abord réalisée sur mobile
-            (375px), puis déclinée en tablette (768px) et desktop (1280px+).
-          </p>
-        </div>
-      </div>
-
-      <div
-        style="
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-          gap: 12px;
-          margin-bottom: 20px;
-        "
-      >
-        <div
-          style="
-            background: white;
-            border-radius: 10px;
-            border: 0.5px solid #e0e0e0;
-            padding: 14px;
-          "
-        >
-          <div
-            style="
-              width: 32px;
-              height: 32px;
-              background: var(--vc);
-              border-radius: 8px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              color: var(--vf);
-              font-weight: 700;
-              font-size: 14px;
-              margin-bottom: 8px;
-            "
-          >
-            1
-          </div>
-          <div
-            style="
-              font-size: 12px;
-              font-weight: 600;
-              color: var(--vf);
-              margin-bottom: 4px;
-            "
-          >
-            Exploration utilisateur
-          </div>
-          <div style="font-size: 11px; color: #777; line-height: 1.5">
-            Analyse des 3 personas (Sophie, Clara, Thomas). Cartographie des
-            parcours BtoC et BtoB. Identification des points de friction sur le
-            site actuel.
-          </div>
-          <div style="margin-top: 8px; font-size: 10px; color: #aaa">
-            Sem. 3 · Figma + UserTesting
-          </div>
-        </div>
-        <div
-          style="
-            background: white;
-            border-radius: 10px;
-            border: 0.5px solid #e0e0e0;
-            padding: 14px;
-          "
-        >
-          <div
-            style="
-              width: 32px;
-              height: 32px;
-              background: var(--vc);
-              border-radius: 8px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              color: var(--vf);
-              font-weight: 700;
-              font-size: 14px;
-              margin-bottom: 8px;
-            "
-          >
-            2
-          </div>
-          <div
-            style="
-              font-size: 12px;
-              font-weight: 600;
-              color: var(--vf);
-              margin-bottom: 4px;
-            "
-          >
-            Zonings
-          </div>
-          <div style="font-size: 11px; color: #777; line-height: 1.5">
-            Découpage en blocs fonctionnels. Hiérarchie visuelle. Attribution
-            des rôles par zone. Mobile 375px en premier, puis tablette et
-            desktop.
-          </div>
-          <div style="margin-top: 8px; font-size: 10px; color: #aaa">
-            Sem. 3 · Figma low-fi
-          </div>
-        </div>
-        <div
-          style="
-            background: white;
-            border-radius: 10px;
-            border: 0.5px solid #e0e0e0;
-            padding: 14px;
-          "
-        >
-          <div
-            style="
-              width: 32px;
-              height: 32px;
-              background: var(--vc);
-              border-radius: 8px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              color: var(--vf);
-              font-weight: 700;
-              font-size: 14px;
-              margin-bottom: 8px;
-            "
-          >
-            3
-          </div>
-          <div
-            style="
-              font-size: 12px;
-              font-weight: 600;
-              color: var(--vf);
-              margin-bottom: 4px;
-            "
-          >
-            Wireframes
-          </div>
-          <div style="font-size: 11px; color: #777; line-height: 1.5">
-            Maquettes basse fidélité avec contenu réel. Structure de navigation,
-            composants UI et flux de données. Annotés pour le handoff dev.
-          </div>
-          <div style="margin-top: 8px; font-size: 10px; color: #aaa">
-            Sem. 4 · Figma
-          </div>
-        </div>
-        <div
-          style="
-            background: white;
-            border-radius: 10px;
-            border: 0.5px solid #e0e0e0;
-            padding: 14px;
-          "
-        >
-          <div
-            style="
-              width: 32px;
-              height: 32px;
-              background: var(--vc);
-              border-radius: 8px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              color: var(--vf);
-              font-weight: 700;
-              font-size: 14px;
-              margin-bottom: 8px;
-            "
-          >
-            4
-          </div>
-          <div
-            style="
-              font-size: 12px;
-              font-weight: 600;
-              color: var(--vf);
-              margin-bottom: 4px;
-            "
-          >
-            Prototypes interactifs
-          </div>
-          <div style="font-size: 11px; color: #777; line-height: 1.5">
-            Navigation cliquable entre écrans. Tests des 3 parcours clés : achat
-            BtoC, devis BtoB, dashboard impact. Tests avec utilisateurs réels.
-          </div>
-          <div style="margin-top: 8px; font-size: 10px; color: #aaa">
-            Sem. 5–6 · Figma + Maze
-          </div>
-        </div>
-      </div>
-
+    <div
+      style="
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+        gap: 12px;
+        margin-bottom: 20px;
+      "
+    >
       <div
         style="
           background: white;
           border-radius: 10px;
           border: 0.5px solid #e0e0e0;
-          padding: 16px;
-          margin-bottom: 16px;
+          padding: 14px;
         "
       >
         <div
           style="
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--gr);
-            margin-bottom: 12px;
+            width: 32px;
+            height: 32px;
+            background: var(--vc);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--vf);
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 8px;
           "
         >
-          Principes UX fondateurs
+          1
         </div>
         <div
           style="
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--vf);
+            margin-bottom: 4px;
           "
         >
-          <div
-            style="
-              background: var(--vc);
-              border-radius: 7px;
-              padding: 10px 12px;
-            "
-          >
-            <div
-              style="
-                font-size: 11px;
-                font-weight: 600;
-                color: var(--vf);
-                margin-bottom: 3px;
-              "
-            >
-              Mobile First absolu
-            </div>
-            <div style="font-size: 10px; color: #555; line-height: 1.5">
-              375px en premier. Aucune maquette desktop sans mobile validé au
-              préalable.
-            </div>
-          </div>
-          <div
-            style="background: #d5e8f0; border-radius: 7px; padding: 10px 12px"
-          >
-            <div
-              style="
-                font-size: 11px;
-                font-weight: 600;
-                color: var(--bb);
-                margin-bottom: 3px;
-              "
-            >
-              Double parcours étanche
-            </div>
-            <div style="font-size: 10px; color: #555; line-height: 1.5">
-              Bifurcation BtoC/BtoB dès la homepage. Tunnels distincts sans
-              mélange.
-            </div>
-          </div>
-          <div
-            style="background: #fff3e0; border-radius: 7px; padding: 10px 12px"
-          >
-            <div
-              style="
-                font-size: 11px;
-                font-weight: 600;
-                color: var(--am);
-                margin-bottom: 3px;
-              "
-            >
-              Impact visible above-the-fold
-            </div>
-            <div style="font-size: 10px; color: #555; line-height: 1.5">
-              Compteur de bouteilles évitées visible sans scroll sur mobile.
-            </div>
-          </div>
-          <div
-            style="
-              background: var(--vc);
-              border-radius: 7px;
-              padding: 10px 12px;
-            "
-          >
-            <div
-              style="
-                font-size: 11px;
-                font-weight: 600;
-                color: var(--vf);
-                margin-bottom: 3px;
-              "
-            >
-              Friction minimale
-            </div>
-            <div style="font-size: 10px; color: #555; line-height: 1.5">
-              Tunnel BtoC en 3 étapes max. Devis BtoB en moins de 5 minutes.
-            </div>
-          </div>
-          <div
-            style="background: #d5e8f0; border-radius: 7px; padding: 10px 12px"
-          >
-            <div
-              style="
-                font-size: 11px;
-                font-weight: 600;
-                color: var(--bb);
-                margin-bottom: 3px;
-              "
-            >
-              WCAG 2.1 AA obligatoire
-            </div>
-            <div style="font-size: 10px; color: #555; line-height: 1.5">
-              Contraste 4,5:1 min. Zones tactiles 44px. Labels hors placeholder.
-            </div>
-          </div>
-          <div
-            style="background: #fff3e0; border-radius: 7px; padding: 10px 12px"
-          >
-            <div
-              style="
-                font-size: 11px;
-                font-weight: 600;
-                color: var(--am);
-                margin-bottom: 3px;
-              "
-            >
-              Test sur iPhone SE
-            </div>
-            <div style="font-size: 10px; color: #555; line-height: 1.5">
-              Validation systématique sur le plus petit format cible (375px).
-            </div>
-          </div>
+          Exploration utilisateur
+        </div>
+        <div style="font-size: 11px; color: #777; line-height: 1.5">
+          Analyse des 3 personas (Sophie, Clara, Thomas). Cartographie des
+          parcours BtoC et BtoB. Identification des points de friction sur le
+          site actuel.
+        </div>
+        <div style="margin-top: 8px; font-size: 10px; color: #aaa">
+          Sem. 3 · Figma + UserTesting
         </div>
       </div>
-
       <div
         style="
           background: white;
           border-radius: 10px;
           border: 0.5px solid #e0e0e0;
-          padding: 16px;
+          padding: 14px;
         "
       >
         <div
           style="
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--gr);
-            margin-bottom: 10px;
+            width: 32px;
+            height: 32px;
+            background: var(--vc);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--vf);
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 8px;
           "
         >
-          Parcours utilisateurs cibles
+          2
         </div>
         <div
           style="
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--vf);
+            margin-bottom: 4px;
           "
         >
-          <div style="border-left: 3px solid var(--vf); padding-left: 10px">
-            <div style="font-size: 11px; font-weight: 600; color: var(--vf)">
-              Sophie B. — BtoC
-            </div>
-            <div
-              style="
-                font-size: 10px;
-                color: #777;
-                line-height: 1.5;
-                margin-top: 2px;
-              "
-            >
-              Homepage → Catalogue → Fiche produit → Panier → Paiement (3
-              étapes) → Dashboard impact → Partage réseaux
-            </div>
-            <div style="font-size: 9px; color: #aaa; margin-top: 3px">
-              Mobile · Instagram · 375px priority
-            </div>
-          </div>
-          <div style="border-left: 3px solid var(--bb); padding-left: 10px">
-            <div style="font-size: 11px; font-weight: 600; color: var(--bb)">
-              Thomas L. — BtoB
-            </div>
-            <div
-              style="
-                font-size: 10px;
-                color: #777;
-                line-height: 1.5;
-                margin-top: 2px;
-              "
-            >
-              Landing Pro → Formulaire devis → Portail pro → Tableau de bord RSE
-              → Export PDF rapport
-            </div>
-            <div style="font-size: 9px; color: #aaa; margin-top: 3px">
-              Desktop · LinkedIn · 1280px priority
-            </div>
-          </div>
-          <div style="border-left: 3px solid var(--am); padding-left: 10px">
-            <div style="font-size: 11px; font-weight: 600; color: var(--am)">
-              Clara M. — BtoB
-            </div>
-            <div
-              style="
-                font-size: 10px;
-                color: #777;
-                line-height: 1.5;
-                margin-top: 2px;
-              "
-            >
-              Homepage Pro → Connexion espace pro → Commande récurrente →
-              Rapport RSE auto → Facturation
-            </div>
-            <div style="font-size: 9px; color: #aaa; margin-top: 3px">
-              Mobile pro · Google · 375px priority
-            </div>
-          </div>
+          Zonings
+        </div>
+        <div style="font-size: 11px; color: #777; line-height: 1.5">
+          Découpage en blocs fonctionnels. Hiérarchie visuelle. Attribution des
+          rôles par zone. Mobile 375px en premier, puis tablette et desktop.
+        </div>
+        <div style="margin-top: 8px; font-size: 10px; color: #aaa">
+          Sem. 3 · Figma low-fi
+        </div>
+      </div>
+      <div
+        style="
+          background: white;
+          border-radius: 10px;
+          border: 0.5px solid #e0e0e0;
+          padding: 14px;
+        "
+      >
+        <div
+          style="
+            width: 32px;
+            height: 32px;
+            background: var(--vc);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--vf);
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 8px;
+          "
+        >
+          3
+        </div>
+        <div
+          style="
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--vf);
+            margin-bottom: 4px;
+          "
+        >
+          Wireframes
+        </div>
+        <div style="font-size: 11px; color: #777; line-height: 1.5">
+          Maquettes basse fidélité avec contenu réel. Structure de navigation,
+          composants UI et flux de données. Annotés pour le handoff dev.
+        </div>
+        <div style="margin-top: 8px; font-size: 10px; color: #aaa">
+          Sem. 4 · Figma
+        </div>
+      </div>
+      <div
+        style="
+          background: white;
+          border-radius: 10px;
+          border: 0.5px solid #e0e0e0;
+          padding: 14px;
+        "
+      >
+        <div
+          style="
+            width: 32px;
+            height: 32px;
+            background: var(--vc);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--vf);
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 8px;
+          "
+        >
+          4
+        </div>
+        <div
+          style="
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--vf);
+            margin-bottom: 4px;
+          "
+        >
+          Prototypes interactifs
+        </div>
+        <div style="font-size: 11px; color: #777; line-height: 1.5">
+          Navigation cliquable entre écrans. Tests des 3 parcours clés : achat
+          BtoC, devis BtoB, dashboard impact. Tests avec utilisateurs réels.
+        </div>
+        <div style="margin-top: 8px; font-size: 10px; color: #aaa">
+          Sem. 5–6 · Figma + Maze
         </div>
       </div>
     </div>
 
-    <!-- ══════════ PANEL 02 — ZONINGS ══════════ -->
-    <div id="panel-zonings" class="panel">
-      <div class="sec-intro">
-        <div class="sec-intro-icon">📐</div>
-        <div>
-          <h3>Zonings — Blocs fonctionnels Mobile First</h3>
-          <p>
-            Le zoning définit la structure en blocs fonctionnels avant tout
-            contenu. Il hiérarchise les zones selon leur priorité d'affichage et
-            de conversion, en commençant obligatoirement par le format 375px.
-          </p>
-        </div>
-      </div>
-
-      <div class="legend-items" style="margin-bottom: 16px">
-        <div class="legend-item">
-          <div class="legend-dot" style="background: var(--vf)"></div>
-          Header/Navigation
-        </div>
-        <div class="legend-item">
-          <div class="legend-dot" style="background: #2e8b57"></div>
-          Hero / Accroche principale
-        </div>
-        <div class="legend-item">
-          <div class="legend-dot" style="background: var(--am)"></div>
-          Impact / Conversion
-        </div>
-        <div class="legend-item">
-          <div
-            class="legend-dot"
-            style="background: var(--vc); border: 0.5px solid var(--vs)"
-          ></div>
-          Section contenu
-        </div>
-        <div class="legend-item">
-          <div
-            class="legend-dot"
-            style="background: #e8e8e8; border: 0.5px solid #ccc"
-          ></div>
-          Fonctionnel
-        </div>
-        <div class="legend-item">
-          <div class="legend-dot" style="background: #2a2a2a"></div>
-          Footer
-        </div>
-      </div>
-
+    <div
+      style="
+        background: white;
+        border-radius: 10px;
+        border: 0.5px solid #e0e0e0;
+        padding: 16px;
+        margin-bottom: 16px;
+      "
+    >
       <div
         style="
           font-size: 13px;
@@ -522,2170 +1387,396 @@
           margin-bottom: 12px;
         "
       >
-        Homepage — Bifurcation BtoC / BtoB
+        Principes UX fondateurs
       </div>
-      <div class="devices-row">
-        <!-- MOBILE ZONING -->
-        <div class="device-col">
-          <div class="device-lbl">Mobile 375px</div>
-          <div class="device-sub">Format prioritaire</div>
-          <div
-            style="
-              width: 180px;
-              display: flex;
-              flex-direction: column;
-              gap: 3px;
-              background: #f0f0f0;
-              padding: 8px;
-              border-radius: 8px;
-              border: 2px solid var(--vf);
-            "
-          >
-            <div class="zone-block z-header" style="height: 32px">
-              Header fixe · Logo + Hamburger
-            </div>
-            <div
-              class="zone-block"
-              style="
-                height: 16px;
-                background: #d6ead8;
-                color: var(--vf);
-                border-color: var(--vf);
-                border-style: solid;
-                font-size: 8px;
-              "
-            >
-              ★★★★★ Trustpilot 4,9/5
-            </div>
-            <div
-              class="zone-block z-hero"
-              style="
-                height: 80px;
-                flex-direction: column;
-                gap: 2px;
-                font-size: 9px;
-              "
-            >
-              <span style="font-weight: 700; font-size: 11px"
-                >Hero · Photo lifestyle</span
-              >
-              <span style="opacity: 0.8">Titre Fraunces + accroche</span>
-              <span style="opacity: 0.8">Image 4:5 plein écran</span>
-            </div>
-            <div
-              class="zone-block z-impact"
-              style="height: 36px; font-size: 9px"
-            >
-              Compteur impact · 2 847 193 bouteilles évitées
-            </div>
-            <div class="zone-block z-cta" style="height: 28px; font-size: 9px">
-              CTA 1 : Commander pour ma maison
-            </div>
-            <div
-              class="zone-block"
-              style="
-                height: 24px;
-                background: white;
-                border: 1.5px solid var(--vf);
-                color: var(--vf);
-                font-size: 8.5px;
-              "
-            >
-              CTA 2 : Solution pour mon entreprise
-            </div>
-            <div
-              class="zone-block z-section"
-              style="
-                height: 90px;
-                flex-direction: column;
-                gap: 2px;
-                font-size: 8.5px;
-              "
-            >
-              <span style="font-weight: 600">Produits phares (scroll H)</span>
-              <span>3 cards · Swipe horizontal</span>
-              <span>Badge impact sur chaque carte</span>
-            </div>
-            <div
-              class="zone-block z-section"
-              style="
-                height: 56px;
-                background: #fff3e0;
-                color: #854f0b;
-                border-color: #ef9f27;
-                font-size: 8.5px;
-                flex-direction: column;
-                gap: 2px;
-              "
-            >
-              <span style="font-weight: 600">Simulateur d'impact</span>
-              <span>Calcul CO₂ évité</span>
-            </div>
-            <div
-              class="zone-block z-section"
-              style="
-                height: 60px;
-                flex-direction: column;
-                gap: 2px;
-                font-size: 8.5px;
-              "
-            >
-              <span style="font-weight: 600">Témoignages clients</span>
-              <span>2 cards · Swipe</span>
-            </div>
-            <div
-              class="zone-block"
-              style="
-                height: 50px;
-                background: #d5e8f0;
-                color: #0c447c;
-                border-color: #185fa5;
-                font-size: 8.5px;
-                flex-direction: column;
-                gap: 2px;
-              "
-            >
-              <span style="font-weight: 600">Zone BtoB — Teaser Pro</span>
-              <span>3 arguments + CTA devis</span>
-            </div>
-            <div
-              class="zone-block z-footer"
-              style="height: 36px; font-size: 8.5px"
-            >
-              Footer · Liens + Réseaux sociaux
-            </div>
-            <div
-              class="zone-block z-nav"
-              style="height: 30px; font-size: 8.5px"
-            >
-              Bottom nav bar fixe · 4 icônes
-            </div>
-          </div>
-          <div
-            style="
-              font-size: 9px;
-              color: #999;
-              text-align: center;
-              margin-top: 2px;
-            "
-          >
-            Scroll vertical · 1 colonne
-          </div>
-        </div>
-
-        <!-- TABLETTE ZONING -->
-        <div class="device-col">
-          <div class="device-lbl">Tablette 768px</div>
-          <div class="device-sub">Format intermédiaire</div>
-          <div
-            style="
-              width: 280px;
-              display: flex;
-              flex-direction: column;
-              gap: 3px;
-              background: #f0f0f0;
-              padding: 8px;
-              border-radius: 8px;
-              border: 1.5px solid var(--vs);
-            "
-          >
-            <div
-              class="zone-block z-header"
-              style="height: 30px; font-size: 9px"
-            >
-              Header · Logo + Nav horizontale partielle + Panier
-            </div>
-            <div
-              class="zone-block z-hero"
-              style="
-                height: 100px;
-                display: grid;
-                grid-template-columns: 3fr 2fr;
-                gap: 4px;
-                padding: 6px;
-              "
-            >
-              <div
-                style="
-                  background: rgba(255, 255, 255, 0.15);
-                  border-radius: 3px;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  font-size: 8.5px;
-                  text-align: center;
-                "
-              >
-                Titre Fraunces 24px<br />Sous-titre + 2 CTAs côte à côte
-              </div>
-              <div
-                style="
-                  background: rgba(255, 255, 255, 0.2);
-                  border-radius: 3px;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  font-size: 8px;
-                  text-align: center;
-                "
-              >
-                Cards impact<br />Trustpilot
-              </div>
-            </div>
-            <div
-              class="zone-block z-impact"
-              style="height: 28px; font-size: 8.5px"
-            >
-              Barre impact · Compteur + Stats
-            </div>
-            <div
-              class="zone-block z-section"
-              style="
-                height: 90px;
-                display: grid;
-                grid-template-columns: 1fr 1fr 1fr;
-                gap: 3px;
-                padding: 5px;
-              "
-            >
-              <div
-                style="
-                  background: white;
-                  border-radius: 3px;
-                  border: 0.5px solid #d0d0d0;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  font-size: 7.5px;
-                  color: #555;
-                  text-align: center;
-                "
-              >
-                Produit<br />card 1
-              </div>
-              <div
-                style="
-                  background: white;
-                  border-radius: 3px;
-                  border: 0.5px solid #d0d0d0;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  font-size: 7.5px;
-                  color: #555;
-                  text-align: center;
-                "
-              >
-                Produit<br />card 2
-              </div>
-              <div
-                style="
-                  background: white;
-                  border-radius: 3px;
-                  border: 0.5px solid #d0d0d0;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  font-size: 7.5px;
-                  color: #555;
-                  text-align: center;
-                "
-              >
-                Produit<br />card 3
-              </div>
-            </div>
-            <div
-              style="display: grid; grid-template-columns: 1fr 1fr; gap: 3px"
-            >
-              <div
-                class="zone-block z-section"
-                style="
-                  height: 56px;
-                  background: #fff3e0;
-                  color: #854f0b;
-                  border-color: #ef9f27;
-                  font-size: 8px;
-                  flex-direction: column;
-                  gap: 1px;
-                "
-              >
-                <span style="font-weight: 600">Simulateur impact</span>
-                <span>Slider interactif</span>
-              </div>
-              <div
-                class="zone-block z-section"
-                style="
-                  height: 56px;
-                  font-size: 8px;
-                  flex-direction: column;
-                  gap: 1px;
-                "
-              >
-                <span style="font-weight: 600">Témoignages</span>
-                <span>2 colonnes</span>
-              </div>
-            </div>
-            <div
-              class="zone-block"
-              style="
-                height: 44px;
-                background: #d5e8f0;
-                color: #0c447c;
-                border-color: #185fa5;
-                font-size: 8px;
-                flex-direction: column;
-                gap: 1px;
-              "
-            >
-              <span style="font-weight: 600"
-                >Section BtoB Pro — layout 2 cols</span
-              >
-              <span>Arguments + CTA devis côte à côte</span>
-            </div>
-            <div
-              class="zone-block z-footer"
-              style="height: 30px; font-size: 8px"
-            >
-              Footer · 2 colonnes
-            </div>
-          </div>
-          <div
-            style="
-              font-size: 9px;
-              color: #999;
-              text-align: center;
-              margin-top: 2px;
-            "
-          >
-            Grille 2–3 colonnes · Nav horizontale
-          </div>
-        </div>
-
-        <!-- DESKTOP ZONING -->
-        <div class="device-col">
-          <div class="device-lbl">Desktop 1280px+</div>
-          <div class="device-sub">Format enrichi</div>
-          <div
-            style="
-              width: 360px;
-              display: flex;
-              flex-direction: column;
-              gap: 3px;
-              background: #f0f0f0;
-              padding: 8px;
-              border-radius: 8px;
-              border: 1.5px solid #888;
-            "
-          >
-            <div
-              class="zone-block z-header"
-              style="height: 28px; font-size: 8.5px"
-            >
-              Header · Logo + Nav complète (5 entrées) + Trustpilot + CTA ambre
-              "Devis entreprise"
-            </div>
-            <div
-              class="zone-block z-hero"
-              style="
-                height: 110px;
-                display: grid;
-                grid-template-columns: 3fr 2fr;
-                gap: 4px;
-                padding: 6px;
-              "
-            >
-              <div
-                style="
-                  background: rgba(255, 255, 255, 0.15);
-                  border-radius: 3px;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  font-size: 8px;
-                  text-align: center;
-                "
-              >
-                H1 Fraunces 36px + sous-titre<br />2 CTAs côte à côte<br />Espacement
-                généreux
-              </div>
-              <div style="display: flex; flex-direction: column; gap: 3px">
-                <div
-                  style="
-                    background: rgba(255, 255, 255, 0.2);
-                    flex: 1;
-                    border-radius: 3px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: 7px;
-                    color: rgba(255, 255, 255, 0.9);
-                    text-align: center;
-                  "
-                >
-                  Card Impact<br />2,8M bouteilles
-                </div>
-                <div
-                  style="
-                    background: rgba(255, 255, 255, 0.15);
-                    flex: 1;
-                    border-radius: 3px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: 7px;
-                    color: rgba(255, 255, 255, 0.9);
-                    text-align: center;
-                  "
-                >
-                  Trustpilot<br />★★★★★ 4,9
-                </div>
-              </div>
-            </div>
-            <div
-              class="zone-block z-section"
-              style="
-                height: 100px;
-                display: grid;
-                grid-template-columns: repeat(4, 1fr);
-                gap: 3px;
-                padding: 5px;
-              "
-            >
-              <div
-                style="
-                  background: white;
-                  border-radius: 3px;
-                  border: 0.5px solid #d0d0d0;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  font-size: 7px;
-                  color: #555;
-                  text-align: center;
-                "
-              >
-                Prod 1<br />avec filtres
-              </div>
-              <div
-                style="
-                  background: white;
-                  border-radius: 3px;
-                  border: 0.5px solid #d0d0d0;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  font-size: 7px;
-                  color: #555;
-                  text-align: center;
-                "
-              >
-                Prod 2
-              </div>
-              <div
-                style="
-                  background: white;
-                  border-radius: 3px;
-                  border: 0.5px solid #d0d0d0;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  font-size: 7px;
-                  color: #555;
-                  text-align: center;
-                "
-              >
-                Prod 3
-              </div>
-              <div
-                style="
-                  background: white;
-                  border-radius: 3px;
-                  border: 0.5px solid #d0d0d0;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  font-size: 7px;
-                  color: #555;
-                  text-align: center;
-                "
-              >
-                Prod 4
-              </div>
-            </div>
-            <div
-              style="display: grid; grid-template-columns: 2fr 1fr; gap: 3px"
-            >
-              <div
-                class="zone-block z-section"
-                style="
-                  height: 50px;
-                  background: #fff3e0;
-                  color: #854f0b;
-                  border-color: #ef9f27;
-                  font-size: 8px;
-                "
-              >
-                Simulateur d'impact · Layout 2 cols desktop
-              </div>
-              <div
-                class="zone-block z-section"
-                style="height: 50px; font-size: 8px"
-              >
-                Témoignages · Carousel 3 items
-              </div>
-            </div>
-            <div
-              class="zone-block"
-              style="
-                height: 44px;
-                background: #d5e8f0;
-                color: #0c447c;
-                border-color: #185fa5;
-                font-size: 8px;
-                display: grid;
-                grid-template-columns: 3fr 2fr;
-                gap: 4px;
-                padding: 6px;
-              "
-            >
-              <div
-                style="
-                  background: rgba(0, 0, 0, 0.05);
-                  border-radius: 3px;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  font-size: 7px;
-                  text-align: center;
-                "
-              >
-                Arguments BtoB · 3 colonnes
-              </div>
-              <div
-                style="
-                  background: rgba(0, 0, 0, 0.07);
-                  border-radius: 3px;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  font-size: 7px;
-                  text-align: center;
-                "
-              >
-                CTA Devis
-              </div>
-            </div>
-            <div
-              class="zone-block z-footer"
-              style="height: 32px; font-size: 8px"
-            >
-              Footer vert forêt · 4 colonnes · Liens + Newsletter +
-              Certifications
-            </div>
-          </div>
-          <div
-            style="
-              font-size: 9px;
-              color: #999;
-              text-align: center;
-              margin-top: 2px;
-            "
-          >
-            Grille 4 colonnes · Nav complète
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ══════════ PANEL 03 — WIREFRAMES ══════════ -->
-    <div id="panel-wireframes" class="panel">
-      <div class="sec-intro">
-        <div class="sec-intro-icon">🖊️</div>
-        <div>
-          <h3>Wireframes basse fidélité — Avec contenu réel</h3>
-          <p>
-            Les wireframes intègrent le contenu réel de Le Fourgon (typographie
-            Fraunces + DM Sans, palette officielle, données chiffrées) pour
-            permettre une validation immédiate des décisions ergonomiques.
-          </p>
-        </div>
-      </div>
-
-      <div class="fmt-tabs">
-        <button class="fmt-btn active" onclick="showFmt('mobile', this)">
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <rect x="5" y="2" width="14" height="20" rx="2" />
-            <line
-              x1="12"
-              y1="18"
-              x2="12"
-              y2="18"
-              stroke-width="3"
-              stroke-linecap="round"
-            />
-          </svg>
-          Mobile 375px
-        </button>
-        <button class="fmt-btn" onclick="showFmt('tablette', this)">
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <rect x="2" y="3" width="20" height="18" rx="2" />
-            <line
-              x1="12"
-              y1="19"
-              x2="12"
-              y2="19"
-              stroke-width="3"
-              stroke-linecap="round"
-            />
-          </svg>
-          Tablette 768px
-        </button>
-        <button class="fmt-btn" onclick="showFmt('desktop', this)">
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <rect x="2" y="3" width="20" height="14" rx="2" />
-            <polyline points="8 21 12 17 16 21" />
-          </svg>
-          Desktop 1280px
-        </button>
-      </div>
-
-      <!-- WIREFRAME MOBILE -->
       <div
-        id="wf-mobile"
-        class="devices-row"
         style="
-          justify-content: flex-start;
-          gap: 20px;
-          flex-wrap: wrap;
-          align-items: flex-start;
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+          gap: 8px;
         "
       >
-        <div class="device-col">
-          <div class="device-lbl">Homepage BtoC</div>
-          <div class="device-sub">Parcours Sophie B.</div>
-          <div class="phone">
-            <div class="phone-notch"></div>
-            <div class="phone-screen">
-              <div class="wf-header">
-                <div class="wf-logo">
-                  <div class="wf-logo-truck"></div>
-                  <span class="wf-logo-txt">LE FOURGON</span>
-                </div>
-                <div class="wf-burger">
-                  <span></span><span></span><span></span>
-                </div>
-              </div>
-              <div class="wf-trustbar">
-                <span class="wf-stars">★★★★★</span
-                ><span style="font-size: 8px"
-                  >Trustpilot 4,9/5 · 12 000+ avis</span
-                >
-              </div>
-              <div class="wf-hero" style="height: 120px">
-                <div class="wf-hero-deco"></div>
-                <h2
-                  class="wf-hero"
-                  style="padding: 0; background: none; height: auto"
-                >
-                  Vos boissons.<br />Zéro plastique.
-                </h2>
-                <p
-                  class="wf-hero"
-                  style="padding: 0; background: none; height: auto"
-                >
-                  Livraison de boissons consignées en verre
-                </p>
-              </div>
-              <div class="wf-impact-strip">
-                <div>
-                  <div class="wf-impact-num">2 847 193</div>
-                  <div class="wf-impact-lbl">bouteilles évitées ce mois-ci</div>
-                </div>
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="white"
-                  stroke-width="2"
-                >
-                  <path d="M12 2L2 7l10 5 10-5-10-5z" />
-                  <path d="M2 17l10 5 10-5" />
-                  <path d="M2 12l10 5 10-5" />
-                </svg>
-              </div>
-              <div class="wf-ctas">
-                <div class="wf-cta-p">Commander pour ma maison</div>
-                <div class="wf-cta-s">Solution pour mon entreprise</div>
-              </div>
-              <div class="wf-section-lbl">Nos produits phares</div>
-              <div class="wf-cards-row">
-                <div class="wf-card">
-                  <div class="wf-card-img b" style="font-size: 14px">🍺</div>
-                  <div class="wf-card-body">
-                    <div class="wf-card-name">Bière blonde<br />artisanale</div>
-                    <div class="wf-card-price">2,80€</div>
-                    <div class="wf-card-badge">–1 bouteille</div>
-                  </div>
-                </div>
-                <div class="wf-card">
-                  <div class="wf-card-img w" style="font-size: 14px">💧</div>
-                  <div class="wf-card-body">
-                    <div class="wf-card-name">Eau minérale<br />verre</div>
-                    <div class="wf-card-price">1,20€</div>
-                    <div class="wf-card-badge">–1 bouteille</div>
-                  </div>
-                </div>
-                <div class="wf-card">
-                  <div class="wf-card-img j" style="font-size: 14px">🍋</div>
-                  <div class="wf-card-body">
-                    <div class="wf-card-name">Jus citron<br />bio</div>
-                    <div class="wf-card-price">3,50€</div>
-                    <div class="wf-card-badge">–1 bouteille</div>
-                  </div>
-                </div>
-              </div>
-              <div class="wf-bottomnav">
-                <div class="wf-navitem act">
-                  <svg
-                    width="12"
-                    height="12"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path
-                      d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"
-                    /></svg
-                  >Accueil
-                </div>
-                <div class="wf-navitem">
-                  <svg
-                    width="12"
-                    height="12"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <circle cx="9" cy="21" r="1" />
-                    <circle cx="20" cy="21" r="1" />
-                    <path
-                      d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"
-                    /></svg
-                  >Panier
-                </div>
-                <div class="wf-navitem">
-                  <svg
-                    width="12"
-                    height="12"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <circle cx="11" cy="11" r="8" />
-                    <line x1="21" y1="21" x2="16.65" y2="16.65" /></svg
-                  >Chercher
-                </div>
-                <div class="wf-navitem">
-                  <svg
-                    width="12"
-                    height="12"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
-                    <circle cx="12" cy="7" r="4" /></svg
-                  >Compte
-                </div>
-              </div>
-            </div>
+        <div
+          style="background: var(--vc); border-radius: 7px; padding: 10px 12px"
+        >
+          <div
+            style="
+              font-size: 11px;
+              font-weight: 600;
+              color: var(--vf);
+              margin-bottom: 3px;
+            "
+          >
+            Mobile First absolu
+          </div>
+          <div style="font-size: 10px; color: #555; line-height: 1.5">
+            375px en premier. Aucune maquette desktop sans mobile validé au
+            préalable.
           </div>
         </div>
-
-        <div class="device-col">
-          <div class="device-lbl">Landing BtoB</div>
-          <div class="device-sub">Parcours Clara M. / Thomas L.</div>
-          <div class="phone">
-            <div class="phone-notch"></div>
-            <div class="phone-screen" style="background: white">
-              <div class="wf-header" style="background: #1e5799">
-                <span class="wf-logo-txt">LE FOURGON PRO</span>
-                <div
-                  style="
-                    background: var(--am);
-                    color: white;
-                    font-size: 7px;
-                    font-weight: 700;
-                    padding: 2px 5px;
-                    border-radius: 3px;
-                  "
-                >
-                  ESPACE PRO
-                </div>
-              </div>
-              <div style="background: #1e5799; padding: 12px 10px">
-                <div
-                  style="
-                    font-family: &quot;Fraunces&quot;, serif;
-                    font-size: 14px;
-                    font-weight: 700;
-                    color: white;
-                    line-height: 1.2;
-                  "
-                >
-                  La solution boissons éco-responsable pour votre entreprise
-                </div>
-                <div
-                  style="
-                    font-size: 8px;
-                    color: rgba(255, 255, 255, 0.7);
-                    margin-top: 4px;
-                    line-height: 1.5;
-                  "
-                >
-                  Livraison · Consigne · Reporting RSE
-                </div>
-              </div>
-              <div
-                style="
-                  display: flex;
-                  gap: 5px;
-                  padding: 8px 10px;
-                  background: white;
-                "
-              >
-                <div
-                  style="
-                    flex: 1;
-                    background: var(--vc);
-                    border-radius: 5px;
-                    padding: 6px;
-                    text-align: center;
-                  "
-                >
-                  <div
-                    style="
-                      font-family: &quot;Fraunces&quot;, serif;
-                      font-size: 13px;
-                      font-weight: 700;
-                      color: var(--vf);
-                    "
-                  >
-                    4,9★
-                  </div>
-                  <div style="font-size: 7px; color: #666">Trustpilot</div>
-                </div>
-                <div
-                  style="
-                    flex: 1;
-                    background: var(--vc);
-                    border-radius: 5px;
-                    padding: 6px;
-                    text-align: center;
-                  "
-                >
-                  <div
-                    style="
-                      font-family: &quot;Fraunces&quot;, serif;
-                      font-size: 13px;
-                      font-weight: 700;
-                      color: var(--vf);
-                    "
-                  >
-                    72h
-                  </div>
-                  <div style="font-size: 7px; color: #666">Devis garanti</div>
-                </div>
-                <div
-                  style="
-                    flex: 1;
-                    background: var(--vc);
-                    border-radius: 5px;
-                    padding: 6px;
-                    text-align: center;
-                  "
-                >
-                  <div
-                    style="
-                      font-family: &quot;Fraunces&quot;, serif;
-                      font-size: 13px;
-                      font-weight: 700;
-                      color: var(--vf);
-                    "
-                  >
-                    RSE
-                  </div>
-                  <div style="font-size: 7px; color: #666">Rapport auto</div>
-                </div>
-              </div>
-              <div
-                style="
-                  padding: 8px 10px;
-                  background: white;
-                  display: flex;
-                  flex-direction: column;
-                  gap: 6px;
-                "
-              >
-                <div
-                  style="
-                    font-size: 9px;
-                    font-weight: 600;
-                    color: #333;
-                    margin-bottom: 2px;
-                  "
-                >
-                  Ce que vous obtenez :
-                </div>
-                <div
-                  style="
-                    display: flex;
-                    align-items: flex-start;
-                    gap: 6px;
-                    padding: 5px 0;
-                    border-bottom: 0.5px solid #f5f5f5;
-                  "
-                >
-                  <div
-                    style="
-                      width: 16px;
-                      height: 16px;
-                      border-radius: 50%;
-                      background: var(--vc);
-                      display: flex;
-                      align-items: center;
-                      justify-content: center;
-                      font-size: 8px;
-                      flex-shrink: 0;
-                    "
-                  >
-                    📦
-                  </div>
-                  <div style="font-size: 8.5px; color: var(--gr)">
-                    <strong>Commandes récurrentes</strong> en 3 clics
-                  </div>
-                </div>
-                <div
-                  style="
-                    display: flex;
-                    align-items: flex-start;
-                    gap: 6px;
-                    padding: 5px 0;
-                    border-bottom: 0.5px solid #f5f5f5;
-                  "
-                >
-                  <div
-                    style="
-                      width: 16px;
-                      height: 16px;
-                      border-radius: 50%;
-                      background: var(--vc);
-                      display: flex;
-                      align-items: center;
-                      justify-content: center;
-                      font-size: 8px;
-                      flex-shrink: 0;
-                    "
-                  >
-                    📊
-                  </div>
-                  <div style="font-size: 8.5px; color: var(--gr)">
-                    <strong>Rapport RSE automatique</strong>
-                  </div>
-                </div>
-                <div
-                  style="
-                    display: flex;
-                    align-items: flex-start;
-                    gap: 6px;
-                    padding: 5px 0;
-                  "
-                >
-                  <div
-                    style="
-                      width: 16px;
-                      height: 16px;
-                      border-radius: 50%;
-                      background: var(--vc);
-                      display: flex;
-                      align-items: center;
-                      justify-content: center;
-                      font-size: 8px;
-                      flex-shrink: 0;
-                    "
-                  >
-                    🧾
-                  </div>
-                  <div style="font-size: 8.5px; color: var(--gr)">
-                    <strong>Facturation centralisée</strong>
-                  </div>
-                </div>
-              </div>
-              <div style="padding: 8px 10px; background: white">
-                <div
-                  style="
-                    background: #1e5799;
-                    color: white;
-                    font-size: 10px;
-                    font-weight: 600;
-                    padding: 9px;
-                    border-radius: 5px;
-                    text-align: center;
-                  "
-                >
-                  Demander un devis gratuit →
-                </div>
-              </div>
-            </div>
+        <div
+          style="background: #d5e8f0; border-radius: 7px; padding: 10px 12px"
+        >
+          <div
+            style="
+              font-size: 11px;
+              font-weight: 600;
+              color: var(--bb);
+              margin-bottom: 3px;
+            "
+          >
+            Double parcours étanche
+          </div>
+          <div style="font-size: 10px; color: #555; line-height: 1.5">
+            Bifurcation BtoC/BtoB dès la homepage. Tunnels distincts sans
+            mélange.
           </div>
         </div>
-
-        <div class="device-col">
-          <div class="device-lbl">Dashboard impact</div>
-          <div class="device-sub">Espace client Sophie B.</div>
-          <div class="phone">
-            <div class="phone-notch"></div>
-            <div class="phone-screen" style="background: #f7f7f7">
-              <div class="wf-header">
-                <span class="wf-logo-txt">MON IMPACT</span>
-                <div
-                  style="
-                    width: 22px;
-                    height: 22px;
-                    border-radius: 50%;
-                    background: var(--vc);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: 9px;
-                    font-weight: 700;
-                    color: var(--vf);
-                  "
-                >
-                  SB
-                </div>
-              </div>
-              <div
-                style="background: var(--vf); padding: 12px; text-align: center"
-              >
-                <div
-                  style="
-                    font-size: 8px;
-                    color: rgba(255, 255, 255, 0.65);
-                    margin-bottom: 3px;
-                  "
-                >
-                  Depuis votre inscription
-                </div>
-                <div
-                  style="
-                    font-family: &quot;Fraunces&quot;, serif;
-                    font-weight: 700;
-                    font-size: 36px;
-                    color: white;
-                    line-height: 1;
-                  "
-                >
-                  127
-                </div>
-                <div
-                  style="
-                    font-size: 9px;
-                    color: var(--vc);
-                    font-weight: 600;
-                    margin-top: 2px;
-                  "
-                >
-                  bouteilles plastique évitées
-                </div>
-                <div
-                  style="
-                    font-size: 8px;
-                    color: rgba(255, 255, 255, 0.6);
-                    margin-top: 3px;
-                  "
-                >
-                  = 3,8 kg CO₂ économisés
-                </div>
-              </div>
-              <div
-                style="
-                  display: grid;
-                  grid-template-columns: 1fr 1fr;
-                  gap: 7px;
-                  padding: 9px;
-                "
-              >
-                <div
-                  style="
-                    background: white;
-                    border-radius: 7px;
-                    padding: 8px;
-                    text-align: center;
-                    border: 0.5px solid #eee;
-                  "
-                >
-                  <div
-                    style="
-                      font-family: &quot;Fraunces&quot;, serif;
-                      font-size: 17px;
-                      font-weight: 700;
-                      color: var(--vf);
-                    "
-                  >
-                    14
-                  </div>
-                  <div style="font-size: 8px; color: #999">Commandes</div>
-                </div>
-                <div
-                  style="
-                    background: white;
-                    border-radius: 7px;
-                    padding: 8px;
-                    text-align: center;
-                    border: 0.5px solid #eee;
-                  "
-                >
-                  <div
-                    style="
-                      font-family: &quot;Fraunces&quot;, serif;
-                      font-size: 17px;
-                      font-weight: 700;
-                      color: var(--am);
-                    "
-                  >
-                    Gold
-                  </div>
-                  <div style="font-size: 8px; color: #999">Fidélité</div>
-                </div>
-                <div
-                  style="
-                    background: white;
-                    border-radius: 7px;
-                    padding: 8px;
-                    text-align: center;
-                    border: 0.5px solid #eee;
-                  "
-                >
-                  <div
-                    style="
-                      font-family: &quot;Fraunces&quot;, serif;
-                      font-size: 17px;
-                      font-weight: 700;
-                      color: var(--vf);
-                    "
-                  >
-                    47€
-                  </div>
-                  <div style="font-size: 8px; color: #999">Panier moyen</div>
-                </div>
-                <div
-                  style="
-                    background: white;
-                    border-radius: 7px;
-                    padding: 8px;
-                    text-align: center;
-                    border: 0.5px solid #eee;
-                  "
-                >
-                  <div
-                    style="
-                      font-family: &quot;Fraunces&quot;, serif;
-                      font-size: 17px;
-                      font-weight: 700;
-                      color: var(--vf);
-                    "
-                  >
-                    3
-                  </div>
-                  <div style="font-size: 8px; color: #999">Amis parrainés</div>
-                </div>
-              </div>
-              <div
-                style="
-                  margin: 0 9px;
-                  background: var(--vc);
-                  border-radius: 7px;
-                  padding: 8px 10px;
-                  display: flex;
-                  align-items: center;
-                  justify-content: space-between;
-                "
-              >
-                <div>
-                  <div
-                    style="font-size: 9px; font-weight: 700; color: var(--vf)"
-                  >
-                    Prochaine livraison
-                  </div>
-                  <div style="font-size: 8px; color: #555; margin-top: 1px">
-                    Mardi 22 avr. · 9h–13h
-                  </div>
-                </div>
-                <div style="font-size: 9px; color: var(--vf); font-weight: 700">
-                  Modifier →
-                </div>
-              </div>
-              <div style="padding: 8px 9px">
-                <div
-                  style="
-                    background: var(--vf);
-                    color: white;
-                    font-size: 10px;
-                    font-weight: 600;
-                    padding: 8px;
-                    border-radius: 5px;
-                    text-align: center;
-                  "
-                >
-                  Partager mon impact
-                </div>
-              </div>
-              <div class="wf-bottomnav">
-                <div class="wf-navitem">
-                  <svg
-                    width="12"
-                    height="12"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path
-                      d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"
-                    /></svg
-                  >Accueil
-                </div>
-                <div class="wf-navitem">
-                  <svg
-                    width="12"
-                    height="12"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <circle cx="9" cy="21" r="1" />
-                    <circle cx="20" cy="21" r="1" />
-                    <path
-                      d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"
-                    /></svg
-                  >Panier
-                </div>
-                <div class="wf-navitem act">
-                  <svg
-                    width="12"
-                    height="12"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <circle cx="12" cy="12" r="10" />
-                    <path d="M12 6v6l4 2" /></svg
-                  >Impact
-                </div>
-                <div class="wf-navitem">
-                  <svg
-                    width="12"
-                    height="12"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
-                    <circle cx="12" cy="7" r="4" /></svg
-                  >Compte
-                </div>
-              </div>
-            </div>
+        <div
+          style="background: #fff3e0; border-radius: 7px; padding: 10px 12px"
+        >
+          <div
+            style="
+              font-size: 11px;
+              font-weight: 600;
+              color: var(--am);
+              margin-bottom: 3px;
+            "
+          >
+            Impact visible above-the-fold
+          </div>
+          <div style="font-size: 10px; color: #555; line-height: 1.5">
+            Compteur de bouteilles évitées visible sans scroll sur mobile.
+          </div>
+        </div>
+        <div
+          style="background: var(--vc); border-radius: 7px; padding: 10px 12px"
+        >
+          <div
+            style="
+              font-size: 11px;
+              font-weight: 600;
+              color: var(--vf);
+              margin-bottom: 3px;
+            "
+          >
+            Friction minimale
+          </div>
+          <div style="font-size: 10px; color: #555; line-height: 1.5">
+            Tunnel BtoC en 3 étapes max. Devis BtoB en moins de 5 minutes.
+          </div>
+        </div>
+        <div
+          style="background: #d5e8f0; border-radius: 7px; padding: 10px 12px"
+        >
+          <div
+            style="
+              font-size: 11px;
+              font-weight: 600;
+              color: var(--bb);
+              margin-bottom: 3px;
+            "
+          >
+            WCAG 2.1 AA obligatoire
+          </div>
+          <div style="font-size: 10px; color: #555; line-height: 1.5">
+            Contraste 4,5:1 min. Zones tactiles 44px. Labels hors placeholder.
+          </div>
+        </div>
+        <div
+          style="background: #fff3e0; border-radius: 7px; padding: 10px 12px"
+        >
+          <div
+            style="
+              font-size: 11px;
+              font-weight: 600;
+              color: var(--am);
+              margin-bottom: 3px;
+            "
+          >
+            Test sur iPhone SE
+          </div>
+          <div style="font-size: 10px; color: #555; line-height: 1.5">
+            Validation systématique sur le plus petit format cible (375px).
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- WIREFRAME TABLETTE -->
+    <div
+      style="
+        background: white;
+        border-radius: 10px;
+        border: 0.5px solid #e0e0e0;
+        padding: 16px;
+      "
+    >
       <div
-        id="wf-tablette"
-        class="devices-row"
-        style="display: none; justify-content: flex-start"
+        style="
+          font-size: 13px;
+          font-weight: 600;
+          color: var(--gr);
+          margin-bottom: 10px;
+        "
       >
-        <div class="device-col" style="width: 100%; max-width: 700px">
-          <div class="device-lbl">Tablette — Homepage 768px</div>
-          <div class="device-sub">
-            Layout 2–3 colonnes · Navigation horizontale partielle
+        Parcours utilisateurs cibles
+      </div>
+      <div
+        style="
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 10px;
+        "
+      >
+        <div style="border-left: 3px solid var(--vf); padding-left: 10px">
+          <div style="font-size: 11px; font-weight: 600; color: var(--vf)">
+            Sophie B. — BtoC
           </div>
-          <div class="tablet" style="width: 100%; max-width: 680px">
-            <div class="tablet-notch"><div class="tablet-cam"></div></div>
-            <div class="tablet-screen">
-              <div class="wf-tab-header">
-                <div class="wf-tab-logo">
-                  <div class="wf-logo-truck"></div>
-                  Le Fourgon
-                </div>
-                <div class="wf-tab-nav">
-                  <span class="act">Produits</span>
-                  <span>Pro</span>
-                  <span>Engagements</span>
-                </div>
-                <div class="wf-tab-cta">Devis entreprise →</div>
-              </div>
-              <div class="wf-tab-hero">
-                <div>
-                  <h2 class="wf-tab-hero" style="background: none; padding: 0">
-                    Des boissons en verre.<br /><em
-                      style="font-style: italic; color: var(--bn)"
-                      >Consignées,</em
-                    ><br />sans plastique.
-                  </h2>
-                  <p class="wf-tab-hero" style="background: none; padding: 0">
-                    Plus de 3 000 références livrées chez vous. Chaque commande
-                    évite du plastique.
-                  </p>
-                  <div class="wf-tab-btns">
-                    <button class="wf-tab-btn-p">Commander</button
-                    ><button class="wf-tab-btn-s">Espace Pro</button>
-                  </div>
-                </div>
-                <div style="display: flex; flex-direction: column; gap: 8px">
-                  <div class="wf-impact-card">
-                    <div class="wf-impact-big">2,8M</div>
-                    <div class="wf-impact-unit">bouteilles évitées</div>
-                    <div class="wf-impact-desc">ce mois · communauté</div>
-                  </div>
-                  <div
-                    class="wf-impact-card"
-                    style="border-left: 2px solid var(--am)"
-                  >
-                    <div
-                      class="wf-impact-big"
-                      style="font-size: 16px; color: var(--am)"
-                    >
-                      4,9 ★
-                    </div>
-                    <div class="wf-impact-unit" style="color: #888">
-                      12 000 avis
-                    </div>
-                    <div class="wf-impact-desc">Trustpilot vérifié</div>
-                  </div>
-                </div>
-              </div>
-              <div
-                style="
-                  padding: 10px 16px;
-                  background: white;
-                  border-top: 0.5px solid #ebebeb;
-                "
-              >
-                <div
-                  style="
-                    font-size: 11px;
-                    font-weight: 600;
-                    color: var(--gr);
-                    margin-bottom: 8px;
-                  "
-                >
-                  Nos produits phares
-                </div>
-                <div class="wf-tab-cards">
-                  <div class="wf-tab-card">
-                    <div class="wf-tab-card-img v1" style="font-size: 22px">
-                      🍺
-                    </div>
-                    <div class="wf-tab-card-body">
-                      <div class="wf-tab-card-name">
-                        Bière blonde artisanale
-                      </div>
-                      <div class="wf-tab-card-price">2,80€</div>
-                    </div>
-                  </div>
-                  <div class="wf-tab-card">
-                    <div class="wf-tab-card-img v2" style="font-size: 22px">
-                      💧
-                    </div>
-                    <div class="wf-tab-card-body">
-                      <div class="wf-tab-card-name">Eau minérale verre</div>
-                      <div class="wf-tab-card-price">1,20€</div>
-                    </div>
-                  </div>
-                  <div class="wf-tab-card">
-                    <div class="wf-tab-card-img v3" style="font-size: 22px">
-                      🍋
-                    </div>
-                    <div class="wf-tab-card-body">
-                      <div class="wf-tab-card-name">Jus de citron bio</div>
-                      <div class="wf-tab-card-price">3,50€</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div
+            style="
+              font-size: 10px;
+              color: #777;
+              line-height: 1.5;
+              margin-top: 2px;
+            "
+          >
+            Homepage → Catalogue → Fiche produit → Panier → Paiement (3 étapes)
+            → Dashboard impact → Partage réseaux
+          </div>
+          <div style="font-size: 9px; color: #aaa; margin-top: 3px">
+            Mobile · Instagram · 375px priority
           </div>
         </div>
-      </div>
-
-      <!-- WIREFRAME DESKTOP -->
-      <div id="wf-desktop" class="devices-row" style="display: none">
-        <div class="device-col" style="width: 100%; max-width: 860px">
-          <div class="device-lbl">Desktop — Homepage 1280px</div>
-          <div class="device-sub">
-            Grille 4 colonnes · Navigation complète · Layout 60/40
+        <div style="border-left: 3px solid var(--bb); padding-left: 10px">
+          <div style="font-size: 11px; font-weight: 600; color: var(--bb)">
+            Thomas L. — BtoB
           </div>
-          <div class="desktop-frame">
-            <div class="desktop-bar">
-              <div class="desktop-dot" style="background: #ff5f57"></div>
-              <div class="desktop-dot" style="background: #ffbd2e"></div>
-              <div class="desktop-dot" style="background: #28ca40"></div>
-              <div class="desktop-url">🔒 lefourgon.com</div>
-            </div>
-            <div class="desktop-screen">
-              <div class="wf-desk-nav">
-                <div class="wf-desk-logo">Le Fourgon</div>
-                <div class="wf-desk-links">
-                  <span class="act">Produits</span><span>Professionnels</span
-                  ><span>Engagements</span><span>Comment ça marche</span
-                  ><span>Blog</span>
-                </div>
-                <div class="wf-desk-right">
-                  <div class="wf-desk-tp">★★★★★ 4,9/5 · 12 000 avis</div>
-                  <div class="wf-desk-cta">Devis entreprise →</div>
-                </div>
-              </div>
-              <div class="wf-desk-hero">
-                <div>
-                  <div class="wf-desk-h1">
-                    Des boissons en verre.<br /><em>Consignées, livrées,</em
-                    ><br />sans plastique.
-                  </div>
-                  <div class="wf-desk-p">
-                    Plus de 3 000 références de boissons consignées, livrées
-                    chez vous ou dans votre entreprise. Chaque commande = des
-                    bouteilles plastique évitées.
-                  </div>
-                  <div class="wf-desk-btns">
-                    <button class="wf-desk-btn-p">Commander maintenant</button
-                    ><button class="wf-desk-btn-s">Solution entreprise</button>
-                  </div>
-                </div>
-                <div class="wf-desk-grid-cards">
-                  <div class="wf-desk-impact">
-                    <div class="big">2,8M</div>
-                    <div class="unit">bouteilles plastique évitées</div>
-                    <div class="desc">ce mois-ci · communauté Le Fourgon</div>
-                  </div>
-                  <div
-                    class="wf-desk-impact"
-                    style="border-left: 2px solid var(--am)"
-                  >
-                    <div class="big" style="font-size: 20px; color: var(--am)">
-                      4,9 ★
-                    </div>
-                    <div class="unit" style="color: #888">
-                      12 000+ avis Trustpilot
-                    </div>
-                    <div class="desc">Note exceptionnelle</div>
-                  </div>
-                </div>
-              </div>
-              <div class="wf-desk-prods">
-                <div class="wf-desk-prods-head">
-                  <div class="wf-desk-prods-title">Nos produits</div>
-                  <div class="wf-desk-filters">
-                    <div class="wf-desk-filter act">Tous</div>
-                    <div class="wf-desk-filter">Bières</div>
-                    <div class="wf-desk-filter">Eaux</div>
-                    <div class="wf-desk-filter">Jus</div>
-                    <div class="wf-desk-filter">Vins</div>
-                  </div>
-                </div>
-                <div class="wf-desk-prod-grid">
-                  <div class="wf-desk-prod">
-                    <div class="wf-desk-prod-img d1" style="font-size: 20px">
-                      🍺
-                    </div>
-                    <div class="wf-desk-prod-body">
-                      <div class="wf-desk-prod-name">
-                        Bière blonde artisanale
-                      </div>
-                      <div class="wf-desk-prod-badge">
-                        –1 bouteille plastique
-                      </div>
-                      <div class="wf-desk-prod-footer">
-                        <div class="wf-desk-prod-price">2,80€</div>
-                        <div class="wf-desk-prod-add">+</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="wf-desk-prod">
-                    <div class="wf-desk-prod-img d2" style="font-size: 20px">
-                      🥂
-                    </div>
-                    <div class="wf-desk-prod-body">
-                      <div class="wf-desk-prod-name">Pétillant rosé bio</div>
-                      <div class="wf-desk-prod-badge">
-                        –1 bouteille plastique
-                      </div>
-                      <div class="wf-desk-prod-footer">
-                        <div class="wf-desk-prod-price">7,50€</div>
-                        <div class="wf-desk-prod-add">+</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="wf-desk-prod">
-                    <div class="wf-desk-prod-img d3" style="font-size: 20px">
-                      💧
-                    </div>
-                    <div class="wf-desk-prod-body">
-                      <div class="wf-desk-prod-name">Eau minérale plate</div>
-                      <div class="wf-desk-prod-badge">
-                        –1 bouteille plastique
-                      </div>
-                      <div class="wf-desk-prod-footer">
-                        <div class="wf-desk-prod-price">1,20€</div>
-                        <div class="wf-desk-prod-add">+</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="wf-desk-prod">
-                    <div class="wf-desk-prod-img d4" style="font-size: 20px">
-                      🧃
-                    </div>
-                    <div class="wf-desk-prod-body">
-                      <div class="wf-desk-prod-name">Jus de pomme pressé</div>
-                      <div class="wf-desk-prod-badge">
-                        –1 bouteille plastique
-                      </div>
-                      <div class="wf-desk-prod-footer">
-                        <div class="wf-desk-prod-price">4,20€</div>
-                        <div class="wf-desk-prod-add">+</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="wf-desk-footer">
-                <div class="wf-desk-footer-logo">Le Fourgon</div>
-                <div class="wf-desk-footer-links">
-                  <span>Mentions légales</span><span>CGV</span
-                  ><span>Contact</span><span>Blog</span>
-                </div>
-              </div>
-            </div>
+          <div
+            style="
+              font-size: 10px;
+              color: #777;
+              line-height: 1.5;
+              margin-top: 2px;
+            "
+          >
+            Landing Pro → Formulaire devis → Portail pro → Tableau de bord RSE →
+            Export PDF rapport
+          </div>
+          <div style="font-size: 9px; color: #aaa; margin-top: 3px">
+            Desktop · LinkedIn · 1280px priority
+          </div>
+        </div>
+        <div style="border-left: 3px solid var(--am); padding-left: 10px">
+          <div style="font-size: 11px; font-weight: 600; color: var(--am)">
+            Clara M. — BtoB
+          </div>
+          <div
+            style="
+              font-size: 10px;
+              color: #777;
+              line-height: 1.5;
+              margin-top: 2px;
+            "
+          >
+            Homepage Pro → Connexion espace pro → Commande récurrente → Rapport
+            RSE auto → Facturation
+          </div>
+          <div style="font-size: 9px; color: #aaa; margin-top: 3px">
+            Mobile pro · Google · 375px priority
           </div>
         </div>
       </div>
     </div>
-
-    <!-- ══════════ PANEL 04 — PROTOTYPES ══════════ -->
-    <div id="panel-prototypes" class="panel">
-      <div class="sec-intro">
-        <div class="sec-intro-icon">▶️</div>
-        <div>
-          <h3>Prototypes interactifs — 3 parcours clés</h3>
-          <p>
-            Les prototypes simulent les interactions et transitions entre
-            écrans. Cliquez sur un parcours pour voir le détail des étapes et
-            l'écran correspondant.
-          </p>
-        </div>
-      </div>
-
-      <div class="proto-grid">
-        <div class="proto-card sel" id="pc-btoc" onclick="selectProto('btoc')">
-          <div class="proto-card-icon">🛒</div>
-          <div class="proto-card-title">Tunnel achat BtoC</div>
-          <div class="proto-card-desc">
-            De la homepage au paiement. Conçu pour Sophie B. en 3 étapes
-            maximum.
-          </div>
-          <span class="proto-card-badge btoc">BtoC · Mobile</span>
-        </div>
-        <div class="proto-card" id="pc-btob" onclick="selectProto('btob')">
-          <div class="proto-card-icon">🏢</div>
-          <div class="proto-card-title">Devis BtoB</div>
-          <div class="proto-card-desc">
-            De la landing Pro au formulaire de devis. Moins de 5 minutes.
-          </div>
-          <span class="proto-card-badge btob">BtoB · Mobile</span>
-        </div>
-        <div class="proto-card" id="pc-impact" onclick="selectProto('impact')">
-          <div class="proto-card-icon">🌿</div>
-          <div class="proto-card-title">Dashboard impact</div>
-          <div class="proto-card-desc">
-            Consultation et partage de l'impact écologique personnel de Sophie
-            B.
-          </div>
-          <span class="proto-card-badge btoc">BtoC · Mobile</span>
-        </div>
-      </div>
-
-      <div class="proto-viewer">
-        <!-- Phone preview -->
-        <div class="proto-phone-col">
-          <div class="phone">
-            <div class="phone-notch"></div>
-            <div
-              class="phone-screen"
-              id="proto-screen-container"
-              style="background: var(--cr); min-height: 380px"
-            ></div>
-          </div>
-          <div style="display: flex; gap: 8px; margin-top: 8px">
-            <button
-              onclick="prevStep()"
-              style="
-                padding: 6px 14px;
-                border-radius: 6px;
-                font-size: 11px;
-                font-weight: 600;
-                background: white;
-                border: 1.5px solid var(--vf);
-                color: var(--vf);
-                cursor: pointer;
-              "
-            >
-              ← Préc.
-            </button>
-            <div
-              id="step-counter"
-              style="
-                font-size: 11px;
-                color: #888;
-                padding: 6px 10px;
-                background: white;
-                border-radius: 6px;
-                border: 0.5px solid #e0e0e0;
-              "
-            >
-              Étape 1/5
-            </div>
-            <button
-              onclick="nextStep()"
-              style="
-                padding: 6px 14px;
-                border-radius: 6px;
-                font-size: 11px;
-                font-weight: 600;
-                background: var(--vf);
-                border: none;
-                color: white;
-                cursor: pointer;
-              "
-            >
-              Suiv. →
-            </button>
-          </div>
-        </div>
-
-        <!-- Steps detail -->
-        <div class="proto-steps" id="proto-steps-container">
-          <div class="proto-steps-title" id="proto-title">
-            Tunnel achat BtoC — Parcours Sophie B.
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ══════════ PANEL 05 — RESPONSIVE ══════════ -->
-    <div id="panel-responsive" class="panel">
-      <div class="sec-intro">
-        <div class="sec-intro-icon">📐</div>
-        <div>
-          <h3>Adaptation responsive — Mobile → Tablette → Desktop</h3>
-          <p>
-            Chaque composant est conçu en 375px et adapté progressivement. Les
-            règles d'adaptation sont définies pour chaque breakpoint via les
-            Design Tokens Figma.
-          </p>
-        </div>
-      </div>
-
-      <div style="display: flex; flex-direction: column; gap: 12px">
-        <div
-          style="
-            background: white;
-            border-radius: 10px;
-            border: 0.5px solid #e0e0e0;
-            padding: 14px;
-          "
-        >
-          <div
-            style="
-              font-size: 13px;
-              font-weight: 600;
-              color: var(--gr);
-              margin-bottom: 10px;
-            "
-          >
-            Breakpoints et adaptations
-          </div>
-          <div
-            style="
-              display: grid;
-              grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-              gap: 10px;
-            "
-          >
-            <div style="border-left: 4px solid var(--vf); padding-left: 10px">
-              <div style="font-size: 12px; font-weight: 600; color: var(--vf)">
-                Mobile — 375px
-              </div>
-              <div
-                style="
-                  font-size: 10px;
-                  color: #555;
-                  line-height: 1.6;
-                  margin-top: 3px;
-                "
-              >
-                1 colonne · Header vert plein · Bottom nav · Scroll vertical ·
-                CTAs pleine largeur · Ratio images 4:5
-              </div>
-            </div>
-            <div style="border-left: 4px solid var(--vs); padding-left: 10px">
-              <div style="font-size: 12px; font-weight: 600; color: var(--vs)">
-                Tablette — 768px
-              </div>
-              <div
-                style="
-                  font-size: 10px;
-                  color: #555;
-                  line-height: 1.6;
-                  margin-top: 3px;
-                "
-              >
-                2–3 colonnes · Header blanc + nav partielle · CTAs côte à côte ·
-                Sidebar optionnelle · Grille flexible
-              </div>
-            </div>
-            <div style="border-left: 4px solid #888; padding-left: 10px">
-              <div style="font-size: 12px; font-weight: 600; color: #555">
-                Desktop — 1280px+
-              </div>
-              <div
-                style="
-                  font-size: 10px;
-                  color: #555;
-                  line-height: 1.6;
-                  margin-top: 3px;
-                "
-              >
-                4 colonnes · Header blanc nav complète · Layout 60/40 · Sidebar
-                filtres · Portail B2B complet
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div
-          style="
-            background: white;
-            border-radius: 10px;
-            border: 0.5px solid #e0e0e0;
-            padding: 14px;
-          "
-        >
-          <div
-            style="
-              font-size: 13px;
-              font-weight: 600;
-              color: var(--gr);
-              margin-bottom: 10px;
-            "
-          >
-            Comparaison côte à côte — Header
-          </div>
-          <div
-            style="
-              display: flex;
-              gap: 12px;
-              flex-wrap: wrap;
-              align-items: flex-start;
-            "
-          >
-            <div style="flex: 1; min-width: 120px">
-              <div
-                style="
-                  font-size: 10px;
-                  color: #888;
-                  margin-bottom: 4px;
-                  font-weight: 600;
-                "
-              >
-                MOBILE 375px
-              </div>
-              <div class="wf-header" style="border-radius: 4px">
-                <div class="wf-logo">
-                  <div class="wf-logo-truck"></div>
-                  <span class="wf-logo-txt" style="font-size: 10px"
-                    >LE FOURGON</span
-                  >
-                </div>
-                <div class="wf-burger">
-                  <span></span><span></span><span></span>
-                </div>
-              </div>
-              <div style="font-size: 9px; color: #aaa; margin-top: 3px">
-                Logo blanc · Hamburger · Fond vert
-              </div>
-            </div>
-            <div style="flex: 2; min-width: 200px">
-              <div
-                style="
-                  font-size: 10px;
-                  color: #888;
-                  margin-bottom: 4px;
-                  font-weight: 600;
-                "
-              >
-                TABLETTE 768px
-              </div>
-              <div
-                class="wf-tab-header"
-                style="border-radius: 4px; padding: 6px 10px"
-              >
-                <div class="wf-tab-logo" style="font-size: 12px">
-                  Le Fourgon
-                </div>
-                <div class="wf-tab-nav" style="font-size: 9px; gap: 10px">
-                  <span class="act">Produits</span><span>Pro</span
-                  ><span>Blog</span>
-                </div>
-                <div
-                  class="wf-tab-cta"
-                  style="font-size: 8px; padding: 4px 7px"
-                >
-                  Devis →
-                </div>
-              </div>
-              <div style="font-size: 9px; color: #aaa; margin-top: 3px">
-                Logo vert · 3 liens · Fond blanc
-              </div>
-            </div>
-            <div style="flex: 3; min-width: 260px">
-              <div
-                style="
-                  font-size: 10px;
-                  color: #888;
-                  margin-bottom: 4px;
-                  font-weight: 600;
-                "
-              >
-                DESKTOP 1280px+
-              </div>
-              <div
-                class="wf-desk-nav"
-                style="border-radius: 4px; border: 0.5px solid #e8e8e8"
-              >
-                <div class="wf-desk-logo" style="font-size: 14px">
-                  Le Fourgon
-                </div>
-                <div class="wf-desk-links" style="font-size: 8.5px; gap: 10px">
-                  <span class="act">Produits</span><span>Professionnels</span
-                  ><span>Engagements</span><span>Blog</span>
-                </div>
-                <div class="wf-desk-right">
-                  <div class="wf-desk-tp" style="font-size: 8px">★★★★★ 4,9</div>
-                  <div
-                    class="wf-desk-cta"
-                    style="font-size: 8px; padding: 4px 8px"
-                  >
-                    Devis →
-                  </div>
-                </div>
-              </div>
-              <div style="font-size: 9px; color: #aaa; margin-top: 3px">
-                Logo vert · 4 liens + Trustpilot + CTA ambre
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div
-          style="
-            background: white;
-            border-radius: 10px;
-            border: 0.5px solid #e0e0e0;
-            padding: 14px;
-          "
-        >
-          <div
-            style="
-              font-size: 13px;
-              font-weight: 600;
-              color: var(--gr);
-              margin-bottom: 10px;
-            "
-          >
-            Comparaison — Grille catalogue
-          </div>
-          <div
-            style="
-              display: flex;
-              gap: 12px;
-              flex-wrap: wrap;
-              align-items: flex-start;
-            "
-          >
-            <div style="flex: 1; min-width: 100px">
-              <div
-                style="
-                  font-size: 10px;
-                  color: #888;
-                  margin-bottom: 4px;
-                  font-weight: 600;
-                "
-              >
-                MOBILE · 1 col.
-              </div>
-              <div
-                class="wf-cards-row"
-                style="flex-direction: column; padding: 0; gap: 5px"
-              >
-                <div
-                  class="wf-card"
-                  style="
-                    display: flex;
-                    gap: 6px;
-                    width: 100%;
-                    border-radius: 5px;
-                  "
-                >
-                  <div
-                    class="wf-card-img b"
-                    style="
-                      font-size: 12px;
-                      width: 40px;
-                      height: 40px;
-                      flex-shrink: 0;
-                      border-radius: 4px 0 0 4px;
-                    "
-                  >
-                    🍺
-                  </div>
-                  <div class="wf-card-body">
-                    <div class="wf-card-name">Bière blonde</div>
-                    <div class="wf-card-price">2,80€</div>
-                  </div>
-                </div>
-                <div
-                  class="wf-card"
-                  style="
-                    display: flex;
-                    gap: 6px;
-                    width: 100%;
-                    border-radius: 5px;
-                  "
-                >
-                  <div
-                    class="wf-card-img w"
-                    style="
-                      font-size: 12px;
-                      width: 40px;
-                      height: 40px;
-                      flex-shrink: 0;
-                      border-radius: 4px 0 0 4px;
-                    "
-                  >
-                    💧
-                  </div>
-                  <div class="wf-card-body">
-                    <div class="wf-card-name">Eau minérale</div>
-                    <div class="wf-card-price">1,20€</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div style="flex: 2; min-width: 160px">
-              <div
-                style="
-                  font-size: 10px;
-                  color: #888;
-                  margin-bottom: 4px;
-                  font-weight: 600;
-                "
-              >
-                TABLETTE · 3 col.
-              </div>
-              <div class="wf-tab-cards" style="gap: 5px">
-                <div class="wf-tab-card">
-                  <div
-                    class="wf-tab-card-img v1"
-                    style="height: 40px; font-size: 16px"
-                  >
-                    🍺
-                  </div>
-                  <div class="wf-tab-card-body">
-                    <div class="wf-tab-card-name" style="font-size: 8px">
-                      Bière blonde
-                    </div>
-                    <div class="wf-tab-card-price" style="font-size: 9px">
-                      2,80€
-                    </div>
-                  </div>
-                </div>
-                <div class="wf-tab-card">
-                  <div
-                    class="wf-tab-card-img v2"
-                    style="height: 40px; font-size: 16px"
-                  >
-                    💧
-                  </div>
-                  <div class="wf-tab-card-body">
-                    <div class="wf-tab-card-name" style="font-size: 8px">
-                      Eau minérale
-                    </div>
-                    <div class="wf-tab-card-price" style="font-size: 9px">
-                      1,20€
-                    </div>
-                  </div>
-                </div>
-                <div class="wf-tab-card">
-                  <div
-                    class="wf-tab-card-img v3"
-                    style="height: 40px; font-size: 16px"
-                  >
-                    🍋
-                  </div>
-                  <div class="wf-tab-card-body">
-                    <div class="wf-tab-card-name" style="font-size: 8px">
-                      Jus citron
-                    </div>
-                    <div class="wf-tab-card-price" style="font-size: 9px">
-                      3,50€
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div style="flex: 3; min-width: 220px">
-              <div
-                style="
-                  font-size: 10px;
-                  color: #888;
-                  margin-bottom: 4px;
-                  font-weight: 600;
-                "
-              >
-                DESKTOP · 4 col. + filtres
-              </div>
-              <div style="margin-bottom: 5px; display: flex; gap: 3px">
-                <div class="wf-desk-filter act" style="font-size: 7.5px">
-                  Tous
-                </div>
-                <div class="wf-desk-filter" style="font-size: 7.5px">
-                  Bières
-                </div>
-                <div class="wf-desk-filter" style="font-size: 7.5px">Eaux</div>
-                <div class="wf-desk-filter" style="font-size: 7.5px">Jus</div>
-              </div>
-              <div
-                class="wf-desk-prod-grid"
-                style="grid-template-columns: repeat(4, 1fr); gap: 5px"
-              >
-                <div class="wf-desk-prod">
-                  <div
-                    class="wf-desk-prod-img d1"
-                    style="height: 40px; font-size: 14px"
-                  >
-                    🍺
-                  </div>
-                  <div class="wf-desk-prod-body">
-                    <div class="wf-desk-prod-name" style="font-size: 7.5px">
-                      Bière blonde
-                    </div>
-                    <div class="wf-desk-prod-footer">
-                      <div class="wf-desk-prod-price" style="font-size: 9px">
-                        2,80€
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="wf-desk-prod">
-                  <div
-                    class="wf-desk-prod-img d2"
-                    style="height: 40px; font-size: 14px"
-                  >
-                    🥂
-                  </div>
-                  <div class="wf-desk-prod-body">
-                    <div class="wf-desk-prod-name" style="font-size: 7.5px">
-                      Pétillant rosé
-                    </div>
-                    <div class="wf-desk-prod-footer">
-                      <div class="wf-desk-prod-price" style="font-size: 9px">
-                        7,50€
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="wf-desk-prod">
-                  <div
-                    class="wf-desk-prod-img d3"
-                    style="height: 40px; font-size: 14px"
-                  >
-                    💧
-                  </div>
-                  <div class="wf-desk-prod-body">
-                    <div class="wf-desk-prod-name" style="font-size: 7.5px">
-                      Eau minérale
-                    </div>
-                    <div class="wf-desk-prod-footer">
-                      <div class="wf-desk-prod-price" style="font-size: 9px">
-                        1,20€
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="wf-desk-prod">
-                  <div
-                    class="wf-desk-prod-img d4"
-                    style="height: 40px; font-size: 14px"
-                  >
-                    🧃
-                  </div>
-                  <div class="wf-desk-prod-body">
-                    <div class="wf-desk-prod-name" style="font-size: 7.5px">
-                      Jus de pomme
-                    </div>
-                    <div class="wf-desk-prod-footer">
-                      <div class="wf-desk-prod-price" style="font-size: 9px">
-                        4,20€
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  </div>
 </div>
+
+<script>
+  const V = "#1A6B3A",
+    VS = "#2E8B57",
+    VC = "#D6EAD8",
+    CR = "#F9F5EE",
+    AM = "#D97706",
+    BB = "#1E5799",
+    GR = "#2D2D2D";
+
+  function showPanel(id, btn) {
+    document
+      .querySelectorAll(".panel")
+      .forEach((p) => p.classList.remove("active"));
+    document
+      .querySelectorAll(".pnav-btn")
+      .forEach((b) => b.classList.remove("active"));
+    document.getElementById("panel-" + id).classList.add("active");
+    btn.classList.add("active");
+  }
+
+  function showFmt(fmt, btn) {
+    document.querySelectorAll('[id^="wf-"]').forEach((el) => {
+      if (el.id.startsWith("wf-")) el.style.display = "none";
+    });
+    document.getElementById("wf-" + fmt).style.display = "flex";
+    document
+      .querySelectorAll(".fmt-btn")
+      .forEach((b) => b.classList.remove("active"));
+    btn.classList.add("active");
+  }
+
+  const protos = {
+    btoc: {
+      title: "Tunnel achat BtoC — Parcours Sophie B.",
+      steps: [
+        {
+          label: "Homepage",
+          desc: "Sophie arrive sur la homepage depuis Instagram. Elle voit immédiatement le compteur d'impact (2 847 193 bouteilles évitées) au-dessus du fold.",
+          note: "UX : Impact visible sans scroll · Confiance instantanée",
+        },
+        {
+          label: "Catalogue",
+          desc: 'Elle clique sur "Commander pour ma maison" et arrive sur le catalogue filtré par catégorie. Grille 1 colonne mobile, badge impact sur chaque produit.',
+          note: "UX : 1 colonne · Filtres en haut · Badge –1 bouteille sur chaque card",
+        },
+        {
+          label: "Fiche produit",
+          desc: 'Sophie sélectionne la bière blonde artisanale. Elle voit le prix, l\'impact, la description et le bouton ambre "Ajouter au panier" en position sticky.',
+          note: "UX : CTA sticky bas d'écran · Zone tactile 52px · Photo lifestyle",
+        },
+        {
+          label: "Panier → Paiement",
+          desc: "Panier avec récapitulatif. Tunnel checkout 3 étapes : Livraison → Paiement (Stripe) → Confirmation. Barre de progression visible.",
+          note: "UX : 3 étapes max · Labels au-dessus champs · Apple Pay proposé",
+        },
+        {
+          label: "Confirmation + Impact",
+          desc: 'Page de confirmation avec compteur personnel mis à jour : "Vous avez évité X bouteilles plastique !" Bouton de partage réseaux sociaux.',
+          note: "UX : Gratification émotionnelle · CTA partage · Retour catalogue facile",
+        },
+      ],
+    },
+    btob: {
+      title: "Parcours devis BtoB — Clara M. / Thomas L.",
+      steps: [
+        {
+          label: "Landing Pro",
+          desc: "Clara arrive sur la landing professionnelle via une recherche Google. En-tête bleu B2B, 3 KPIs (72h devis · 4,9★ · RSE), liste des fonctionnalités.",
+          note: "UX : Code couleur bleu = espace pro distinct · Ton factuel",
+        },
+        {
+          label: "Formulaire devis",
+          desc: 'Clara clique sur "Demander un devis gratuit". Formulaire simple : entreprise, secteur, nombre d\'employés, fréquence souhaitée, email.',
+          note: "UX : Max 5 min de remplissage · Labels au-dessus · Étapes claires",
+        },
+        {
+          label: "Portail pro",
+          desc: "Après validation, Clara accède à l'espace professionnel avec son tableau de bord : commandes, factures, rapport RSE téléchargeable.",
+          note: "UX : Interface sobre · Export PDF RSE en 1 clic · Récurrence paramétrable",
+        },
+      ],
+    },
+    impact: {
+      title: "Dashboard impact — Sophie B.",
+      steps: [
+        {
+          label: "Espace impact",
+          desc: "Sophie ouvre son espace impact depuis la bottom nav. Elle voit son compteur : 127 bouteilles plastique évitées depuis son inscription.",
+          note: "UX : Chiffre personnel · Dimension émotionnelle forte",
+        },
+        {
+          label: "Détail et métriques",
+          desc: "Scroll vers le bas : métriques complètes (commandes, panier moyen, amis parrainés, niveau fidélité Gold). Grille 2×2.",
+          note: "UX : Gamification fidélité · Parrainage visible · Progression motivante",
+        },
+        {
+          label: "Partage réseaux",
+          desc: 'Sophie clique sur "Partager mon impact". Options : Instagram Story, copier le texte, envoyer par message. Le contenu est pré-formaté.',
+          note: "UX : Partage en 1 tap · Contenu prêt à l'emploi · Aucune friction",
+        },
+      ],
+    },
+  };
+
+  const screens = {
+    home: `<div style="background:${CR};"><div style="background:${V};padding:7px 10px;display:flex;align-items:center;justify-content:space-between;"><div style="display:flex;align-items:center;gap:4px;"><div style="width:14px;height:9px;background:white;border-radius:2px 2px 0 0;position:relative;opacity:.9;"></div><span style="font-family:'Fraunces',serif;font-size:11px;font-weight:700;color:white;">LE FOURGON</span></div><div style="display:flex;flex-direction:column;gap:2px;"><span style="display:block;width:14px;height:1.5px;background:white;border-radius:1px;"></span><span style="display:block;width:14px;height:1.5px;background:white;border-radius:1px;"></span><span style="display:block;width:14px;height:1.5px;background:white;border-radius:1px;"></span></div></div><div style="background:${VS};padding:3px 10px;font-size:8px;color:white;display:flex;align-items:center;gap:4px;"><span style="color:#FBBF24;">★★★★★</span>Trustpilot 4,9/5</div><div style="background:linear-gradient(170deg,${V},${VS});padding:14px 10px 12px;height:110px;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;"><div style="position:absolute;width:70px;height:70px;border-radius:50%;border:12px solid rgba(255,255,255,.07);top:-15px;right:-15px;"></div><div style="font-family:'Fraunces',serif;font-size:16px;font-weight:700;color:white;line-height:1.2;position:relative;">Vos boissons.<br>Zéro plastique.</div><div style="font-size:8.5px;color:rgba(255,255,255,.75);margin-top:3px;position:relative;">Livraison consignée en verre</div></div><div style="background:${AM};padding:6px 10px;display:flex;align-items:center;justify-content:space-between;"><div><div style="font-family:'Fraunces',serif;font-size:15px;font-weight:700;color:white;line-height:1;">2 847 193</div><div style="font-size:7px;color:rgba(255,255,255,.85);">bouteilles évitées ce mois-ci</div></div><div style="font-size:7px;color:white;text-align:right;">communauté<br>Le Fourgon</div></div><div style="padding:8px 10px;display:flex;flex-direction:column;gap:5px;"><div style="background:${V};color:white;font-size:10px;font-weight:600;padding:8px;border-radius:5px;text-align:center;">Commander pour ma maison</div><div style="background:white;color:${V};font-size:10px;font-weight:600;padding:7px;border-radius:5px;text-align:center;border:1.5px solid ${V};">Solution pour mon entreprise</div></div></div>`,
+    catalogue: `<div style="background:${CR};"><div style="background:${V};padding:7px 10px;display:flex;align-items:center;justify-content:space-between;"><span style="font-family:'Fraunces',serif;font-size:11px;font-weight:700;color:white;">← Catalogue</span><div style="display:flex;gap:5px;"><span style="font-size:8px;color:white;background:rgba(255,255,255,.2);padding:2px 6px;border-radius:10px;">Filtres</span><span style="font-size:8px;color:white;background:rgba(255,255,255,.2);padding:2px 6px;border-radius:10px;">Trier</span></div></div><div style="padding:6px 10px;display:flex;gap:4px;overflow-x:auto;background:white;border-bottom:.5px solid #eee;"><span style="font-size:8px;font-weight:600;padding:3px 8px;border-radius:12px;background:${V};color:white;white-space:nowrap;">Tous</span><span style="font-size:8px;padding:3px 8px;border-radius:12px;background:#f0f0f0;color:#666;white-space:nowrap;">Bières</span><span style="font-size:8px;padding:3px 8px;border-radius:12px;background:#f0f0f0;color:#666;white-space:nowrap;">Eaux</span><span style="font-size:8px;padding:3px 8px;border-radius:12px;background:#f0f0f0;color:#666;white-space:nowrap;">Jus</span></div><div style="padding:8px 10px;display:flex;flex-direction:column;gap:7px;">${["🍺 Bière blonde artisanale · 2,80€", "💧 Eau minérale verre · 1,20€", "🍋 Jus de citron bio · 3,50€"].map((p) => `<div style="background:white;border-radius:7px;border:.5px solid #e0e0e0;display:flex;align-items:center;gap:8px;overflow:hidden;"><div style="width:52px;height:52px;background:#FEF9C3;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">${p.split(" ")[0]}</div><div style="flex:1;"><div style="font-size:9px;font-weight:600;color:${GR};">${p.split("·")[0].trim().slice(2)}</div><div style="font-size:7px;background:${VC};color:${V};display:inline-block;padding:1px 4px;border-radius:2px;margin:2px 0;font-weight:600;">–1 bouteille</div><div style="font-size:11px;font-weight:700;color:${V};">${p.split("·")[1].trim()}</div></div><div style="width:28px;height:28px;background:${V};color:white;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:300;margin-right:8px;">+</div></div>`).join("")}</div></div>`,
+    product: `<div style="background:white;"><div style="background:${V};padding:7px 10px;"><span style="font-family:'Fraunces',serif;font-size:11px;font-weight:700;color:white;">← Bière blonde artisanale</span></div><div style="height:130px;background:#FEF9C3;display:flex;align-items:center;justify-content:center;font-size:48px;">🍺</div><div style="padding:10px;"><div style="font-family:'Fraunces',serif;font-size:16px;font-weight:700;color:${GR};margin-bottom:3px;">Bière blonde artisanale</div><div style="font-size:9px;color:#777;margin-bottom:5px;">33cl · Consignée en verre · Brasserie locale</div><div style="background:${VC};color:${V};font-size:9px;font-weight:600;padding:3px 8px;border-radius:12px;display:inline-block;margin-bottom:8px;">–1 bouteille plastique par achat</div><div style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:${V};margin-bottom:8px;">2,80€ <span style="font-size:12px;color:#999;font-weight:400;">/ bouteille</span></div><div style="font-size:9px;color:#555;line-height:1.6;margin-bottom:10px;">Bière blonde légèrement ambrée, brassée artisanalement. Notes de malt, finale douce et équilibrée. Livrée en bouteille de verre consignée, récupérée à chaque livraison.</div><div style="display:flex;gap:5px;margin-bottom:8px;"><div style="flex:1;text-align:center;background:#f8f8f8;border-radius:5px;padding:6px;"><div style="font-size:8px;color:#999;">Volume</div><div style="font-size:10px;font-weight:600;">33cl</div></div><div style="flex:1;text-align:center;background:#f8f8f8;border-radius:5px;padding:6px;"><div style="font-size:8px;color:#999;">Alcool</div><div style="font-size:10px;font-weight:600;">4,8%</div></div><div style="flex:1;text-align:center;background:#f8f8f8;border-radius:5px;padding:6px;"><div style="font-size:8px;color:#999;">Origine</div><div style="font-size:10px;font-weight:600;">Locale</div></div></div></div><div style="padding:8px 10px;background:white;border-top:.5px solid #f0f0f0;"><div style="background:${AM};color:white;font-size:11px;font-weight:700;padding:10px;border-radius:6px;text-align:center;">Ajouter au panier · 2,80€</div></div></div>`,
+    checkout: `<div style="background:white;"><div style="background:${V};padding:7px 10px;"><span style="font-family:'Fraunces',serif;font-size:11px;font-weight:700;color:white;">Finaliser ma commande</span></div><div class="checkout-progress" style="padding:8px 10px;"><div class="cp-step"><div class="cp-dot done">1</div></div><div class="cp-line done"></div><div class="cp-step"><div class="cp-dot current">2</div></div><div class="cp-line"></div><div class="cp-step"><div class="cp-dot todo">3</div></div></div><div style="padding:10px 10px 0;"><div style="font-size:11px;font-weight:600;color:${GR};margin-bottom:8px;">Votre livraison</div><div style="margin-bottom:8px;"><div style="font-size:9px;font-weight:600;color:#555;margin-bottom:3px;">Adresse de livraison</div><div style="border:.5px solid #e0e0e0;border-radius:5px;padding:7px;font-size:9px;color:#333;">12 rue des Artisans, 75011 Paris</div></div><div style="margin-bottom:8px;"><div style="font-size:9px;font-weight:600;color:#555;margin-bottom:3px;">Créneau de livraison</div><div style="display:flex;gap:5px;flex-wrap:wrap;">${["Mardi 22/04 9h-12h", "Mardi 22/04 14h-17h", "Jeudi 24/04 9h-12h"].map((s, i) => `<div style="font-size:8px;padding:4px 8px;border-radius:5px;border:${i === 0 ? `1.5px solid ${V};background:${VC};color:${V};font-weight:600;` : "1px solid #ddd;background:white;color:#555;"}">${s}</div>`).join("")}</div></div><div style="margin-bottom:10px;"><div style="font-size:9px;font-weight:600;color:#555;margin-bottom:3px;">Récapitulatif</div><div style="background:#f8f8f8;border-radius:5px;padding:7px;"><div style="display:flex;justify-content:space-between;font-size:8.5px;padding:2px 0;"><span>Bière blonde artisanale ×3</span><span style="font-weight:600;">8,40€</span></div><div style="display:flex;justify-content:space-between;font-size:8.5px;padding:2px 0;"><span>Livraison</span><span style="font-weight:600;color:${V};">Gratuite</span></div><div style="display:flex;justify-content:space-between;font-size:9px;font-weight:700;padding:4px 0 0;border-top:.5px solid #e0e0e0;margin-top:4px;"><span>Total</span><span style="color:${V};">8,40€</span></div></div></div></div><div style="padding:0 10px 8px;"><div style="background:${V};color:white;font-size:11px;font-weight:700;padding:10px;border-radius:6px;text-align:center;">Continuer → Paiement</div></div></div>`,
+    confirm: `<div style="background:${CR};"><div style="background:${V};padding:7px 10px;text-align:center;"><span style="font-family:'Fraunces',serif;font-size:11px;font-weight:700;color:white;">Commande confirmée !</span></div><div style="background:${V};padding:16px;text-align:center;"><div style="width:44px;height:44px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;margin:0 auto 8px;">✓</div><div style="font-family:'Fraunces',serif;font-size:14px;font-weight:700;color:white;margin-bottom:3px;">Bravo Sophie !</div><div style="font-size:9px;color:${VC};">Votre commande a été validée</div></div><div style="background:white;margin:10px;border-radius:8px;padding:12px;text-align:center;border:.5px solid ${VC};"><div style="font-size:9px;color:#777;margin-bottom:4px;">Avec cette commande, vous avez évité</div><div style="font-family:'Fraunces',serif;font-size:34px;font-weight:700;color:${V};line-height:1;">130</div><div style="font-size:10px;color:${VS};font-weight:600;margin-top:2px;">bouteilles plastique évitées au total</div><div style="font-size:8.5px;color:#999;margin-top:4px;">= 3,9 kg de CO₂ économisés depuis votre inscription</div></div><div style="padding:8px 10px;display:flex;flex-direction:column;gap:6px;"><div style="background:${V};color:white;font-size:10px;font-weight:600;padding:9px;border-radius:6px;text-align:center;">Partager mon impact</div><div style="background:white;color:${V};font-size:10px;font-weight:600;padding:8px;border-radius:6px;text-align:center;border:1.5px solid ${V};">Retour au catalogue</div></div></div>`,
+    btob_land: `<div style="background:white;"><div style="background:#1E5799;padding:7px 10px;display:flex;align-items:center;justify-content:space-between;"><span style="font-family:'Fraunces',serif;font-size:11px;font-weight:700;color:white;">LE FOURGON PRO</span><div style="background:${AM};color:white;font-size:7px;font-weight:700;padding:2px 5px;border-radius:3px;">ESPACE PRO</div></div><div style="background:#1E5799;padding:14px 10px;"><div style="font-family:'Fraunces',serif;font-size:14px;font-weight:700;color:white;line-height:1.2;margin-bottom:5px;">La solution boissons éco-responsable pour votre entreprise</div><div style="font-size:8px;color:rgba(255,255,255,.7);line-height:1.5;">Livraison · Consigne · Rapport RSE automatique</div></div><div style="display:flex;gap:5px;padding:8px 10px;background:#f0f4ff;"><div style="flex:1;background:white;border-radius:5px;padding:6px;text-align:center;border:.5px solid ${VC};"><div style="font-family:'Fraunces',serif;font-size:14px;font-weight:700;color:${V};">72h</div><div style="font-size:7px;color:#666;">Devis garanti</div></div><div style="flex:1;background:white;border-radius:5px;padding:6px;text-align:center;border:.5px solid ${VC};"><div style="font-family:'Fraunces',serif;font-size:14px;font-weight:700;color:${V};">4,9★</div><div style="font-size:7px;color:#666;">Trustpilot</div></div><div style="flex:1;background:white;border-radius:5px;padding:6px;text-align:center;border:.5px solid ${VC};"><div style="font-family:'Fraunces',serif;font-size:14px;font-weight:700;color:${V};">RSE</div><div style="font-size:7px;color:#666;">Rapport auto</div></div></div><div style="padding:8px 10px;display:flex;flex-direction:column;gap:5px;background:white;"><div style="display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:.5px solid #f5f5f5;"><div style="width:15px;height:15px;background:${VC};border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:8px;">✓</div><div style="font-size:8.5px;color:${GR};"><strong>Commandes récurrentes</strong> en 3 clics</div></div><div style="display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:.5px solid #f5f5f5;"><div style="width:15px;height:15px;background:${VC};border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:8px;">✓</div><div style="font-size:8.5px;color:${GR};"><strong>Rapport RSE</strong> trimestriel automatique</div></div><div style="display:flex;align-items:center;gap:6px;padding:4px 0;"><div style="width:15px;height:15px;background:${VC};border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:8px;">✓</div><div style="font-size:8.5px;color:${GR};"><strong>Facturation centralisée</strong> · 1 interlocuteur</div></div></div><div style="padding:8px 10px;background:white;"><div style="background:#1E5799;color:white;font-size:10px;font-weight:700;padding:9px;border-radius:5px;text-align:center;">Demander un devis gratuit →</div></div></div>`,
+    btob_form: `<div style="background:white;"><div style="background:#1E5799;padding:7px 10px;"><span style="font-family:'Fraunces',serif;font-size:11px;font-weight:700;color:white;">← Demande de devis</span></div><div style="padding:2px 10px;display:flex;gap:4px;background:#f0f4ff;border-bottom:.5px solid #ddd;"><div style="flex:1;height:3px;border-radius:2px;background:#1E5799;margin-top:6px;margin-bottom:6px;"></div><div style="flex:1;height:3px;border-radius:2px;background:#e0e0e0;margin-top:6px;margin-bottom:6px;"></div><div style="flex:1;height:3px;border-radius:2px;background:#e0e0e0;margin-top:6px;margin-bottom:6px;"></div></div><div style="padding:10px 10px 0;"><div style="font-size:11px;font-weight:600;color:${GR};margin-bottom:8px;">Votre entreprise</div>${[
+      ["Nom de l'entreprise", "Ex: Acme SAS"],
+      ["Secteur d'activité", "Ex: Tech, Événementiel…"],
+      ["Nombre d'employés", "Ex: 50–200"],
+    ]
+      .map(
+        ([lbl, ph]) =>
+          `<div style="margin-bottom:8px;"><div style="font-size:9px;font-weight:600;color:#555;margin-bottom:3px;">${lbl}</div><div style="border:1px solid #e0e0e0;border-radius:5px;padding:7px;font-size:9px;color:#aaa;">${ph}</div></div>`,
+      )
+      .join(
+        "",
+      )}<div style="margin-bottom:8px;"><div style="font-size:9px;font-weight:600;color:#555;margin-bottom:3px;">Fréquence souhaitée</div><div style="display:flex;gap:4px;">${["Hebdomadaire", "Mensuelle", "À la demande"].map((f, i) => `<div style="font-size:8px;padding:4px 7px;border-radius:5px;border:${i === 0 ? `1.5px solid #1E5799;background:#D5E8F0;color:#1E5799;font-weight:600;` : "1px solid #ddd;color:#666;"}">${f}</div>`).join("")}</div></div><div style="margin-bottom:10px;"><div style="font-size:9px;font-weight:600;color:#555;margin-bottom:3px;">Email professionnel *</div><div style="border:1.5px solid #1E5799;border-radius:5px;padding:7px;font-size:9px;color:#333;">clara@acme.com</div></div></div><div style="padding:0 10px 8px;"><div style="background:#1E5799;color:white;font-size:10px;font-weight:700;padding:9px;border-radius:5px;text-align:center;">Envoyer ma demande →</div></div></div>`,
+    btob_portal: `<div style="background:#f7f7f7;"><div style="background:#1E5799;padding:7px 10px;display:flex;align-items:center;justify-content:space-between;"><span style="font-family:'Fraunces',serif;font-size:11px;font-weight:700;color:white;">ESPACE PRO</span><div style="width:22px;height:22px;border-radius:50%;background:#D5E8F0;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#1E5799;">CM</div></div><div style="padding:8px 10px;"><div style="font-size:9px;color:#777;margin-bottom:6px;">Bienvenue, Clara — Acme SAS</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px;"><div style="background:white;border-radius:7px;padding:8px;border:.5px solid #eee;text-align:center;"><div style="font-family:'Fraunces',serif;font-size:16px;font-weight:700;color:#1E5799;">8</div><div style="font-size:8px;color:#999;">Commandes</div></div><div style="background:white;border-radius:7px;padding:8px;border:.5px solid #eee;text-align:center;"><div style="font-family:'Fraunces',serif;font-size:16px;font-weight:700;color:${V};">RSE</div><div style="font-size:8px;color:#999;">Rapport T1 dispo</div></div></div><div style="background:white;border-radius:7px;padding:10px;margin-bottom:6px;border:.5px solid #eee;"><div style="font-size:10px;font-weight:600;color:${GR};margin-bottom:6px;">Prochaine livraison</div><div style="display:flex;justify-content:space-between;align-items:center;"><div><div style="font-size:9px;color:#555;">Mardi 22 avril · 9h–13h</div><div style="font-size:8px;color:#999;">Commande #2024-047</div></div><div style="font-size:9px;color:#1E5799;font-weight:600;">Modifier →</div></div></div><div style="background:${VC};border-radius:7px;padding:8px;border:.5px solid ${VS};"><div style="font-size:9px;font-weight:600;color:${V};margin-bottom:3px;">Rapport RSE T1 2026 disponible</div><div style="font-size:8px;color:#555;line-height:1.5;margin-bottom:5px;">127 bouteilles plastique évitées · 3,8 kg CO₂ économisés</div><div style="background:${V};color:white;font-size:8px;font-weight:600;padding:5px;border-radius:4px;text-align:center;">Télécharger le PDF</div></div></div></div>`,
+    impact1: `<div style="background:${CR};"><div style="background:${V};padding:7px 10px;display:flex;align-items:center;justify-content:space-between;"><span style="font-family:'Fraunces',serif;font-size:11px;font-weight:700;color:white;">MON IMPACT</span><div style="width:22px;height:22px;border-radius:50%;background:${VC};display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:${V};">SB</div></div><div style="background:${V};padding:14px;text-align:center;"><div style="font-size:8px;color:rgba(255,255,255,.65);margin-bottom:4px;">Depuis votre inscription</div><div style="font-family:'Fraunces',serif;font-weight:700;font-size:44px;color:white;line-height:1;">127</div><div style="font-size:10px;color:${VC};font-weight:600;margin-top:3px;">bouteilles plastique évitées</div><div style="font-size:8px;color:rgba(255,255,255,.6);margin-top:4px;">= 3,8 kg de CO₂ économisés</div></div><div style="padding:10px;background:#f8f8f8;"><div style="font-size:10px;font-weight:600;color:${GR};margin-bottom:8px;">Votre progression</div><div style="background:white;border-radius:8px;padding:10px;border:.5px solid #eee;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;"><span style="font-size:9px;color:#555;">Niveau actuel</span><span style="background:#FFF3E0;color:${AM};font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;">Gold</span></div><div style="height:5px;background:#e0e0e0;border-radius:3px;overflow:hidden;"><div style="height:100%;width:72%;background:${AM};border-radius:3px;"></div></div><div style="font-size:8px;color:#aaa;margin-top:3px;">72% vers le niveau Platine · encore 28 commandes</div></div></div></div>`,
+    impact2: `<div style="background:#f7f7f7;"><div style="background:${V};padding:7px 10px;"><span style="font-family:'Fraunces',serif;font-size:11px;font-weight:700;color:white;">← Mes statistiques</span></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:10px;"><div style="background:white;border-radius:7px;padding:10px;text-align:center;border:.5px solid #eee;"><div style="font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:${V};">14</div><div style="font-size:8px;color:#999;">Commandes</div></div><div style="background:white;border-radius:7px;padding:10px;text-align:center;border:.5px solid #eee;"><div style="font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:${AM};">Gold</div><div style="font-size:8px;color:#999;">Fidélité</div></div><div style="background:white;border-radius:7px;padding:10px;text-align:center;border:.5px solid #eee;"><div style="font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:${V};">47€</div><div style="font-size:8px;color:#999;">Panier moyen</div></div><div style="background:white;border-radius:7px;padding:10px;text-align:center;border:.5px solid #eee;"><div style="font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:${V};">3</div><div style="font-size:8px;color:#999;">Amis parrainés</div></div></div><div style="margin:0 10px;background:${VC};border-radius:8px;padding:10px;border:.5px solid ${VS};"><div style="font-size:10px;font-weight:600;color:${V};margin-bottom:4px;">Équivalent de votre impact</div><div style="font-size:8.5px;color:#555;line-height:1.6;">127 bouteilles = 1 340 km de déchets plastique épargnés · Soit le tour de Paris 72 fois</div></div><div style="padding:8px 10px;margin-top:6px;"><div style="background:${V};color:white;font-size:10px;font-weight:600;padding:9px;border-radius:5px;text-align:center;">Partager mon impact →</div></div></div>`,
+    impact3: `<div style="background:${CR};"><div style="background:${V};padding:7px 10px;"><span style="font-family:'Fraunces',serif;font-size:11px;font-weight:700;color:white;">← Partager mon impact</span></div><div style="padding:10px;"><div style="background:${V};border-radius:10px;padding:14px;text-align:center;margin-bottom:10px;"><div style="font-family:'Fraunces',serif;font-size:13px;font-weight:700;color:white;margin-bottom:4px;">Mon impact Le Fourgon</div><div style="font-family:'Fraunces',serif;font-size:36px;font-weight:700;color:white;line-height:1;">127</div><div style="font-size:9px;color:${VC};font-weight:600;margin-top:2px;">bouteilles plastique évitées</div><div style="font-size:8px;color:rgba(255,255,255,.65);margin-top:3px;">= 3,8 kg CO₂ économisés</div></div><div style="font-size:10px;font-weight:600;color:${GR};margin-bottom:7px;">Partager sur</div><div style="display:flex;flex-direction:column;gap:5px;"><div style="background:white;border-radius:6px;border:.5px solid #e0e0e0;padding:9px 12px;display:flex;align-items:center;gap:8px;font-size:10px;font-weight:600;color:${GR};"><span style="font-size:14px;">📸</span>Ajouter en Story Instagram</div><div style="background:white;border-radius:6px;border:.5px solid #e0e0e0;padding:9px 12px;display:flex;align-items:center;gap:8px;font-size:10px;font-weight:600;color:${GR};"><span style="font-size:14px;">📱</span>Envoyer par message</div><div style="background:white;border-radius:6px;border:.5px solid #e0e0e0;padding:9px 12px;display:flex;align-items:center;gap:8px;font-size:10px;font-weight:600;color:${GR};"><span style="font-size:14px;">📋</span>Copier le texte</div></div></div></div>`,
+  };
+
+  let currentProto = "btoc";
+  let currentStep = 0;
+
+  const stepsData = {
+    btoc: ["home", "catalogue", "product", "checkout", "confirm"],
+    btob: ["btob_land", "btob_form", "btob_portal"],
+    impact: ["impact1", "impact2", "impact3"],
+  };
+
+  function renderProto() {
+    const p = protos[currentProto];
+    const steps = p.steps;
+    const total = steps.length;
+    const step = steps[currentStep];
+    document.getElementById("proto-title").textContent = p.title;
+    document.getElementById("step-counter").textContent =
+      `Étape ${currentStep + 1}/${total}`;
+    document.getElementById("proto-screen-container").innerHTML =
+      screens[stepsData[currentProto][currentStep]] ||
+      '<div style="padding:20px;text-align:center;color:#aaa;font-size:12px;">Écran en préparation</div>';
+    const sc = document.getElementById("proto-steps-container");
+    sc.querySelector(".proto-steps-title").textContent = p.title;
+    sc.querySelectorAll(".step-item").forEach((el) => el.remove());
+    steps.forEach((stepData, i) => {
+      const div = document.createElement("div");
+      div.className = "step-item" + (i === currentStep ? " active" : "");
+      div.onclick = () => {
+        currentStep = i;
+        renderProto();
+      };
+      div.innerHTML = `<div class="step-num">${i + 1}</div><div class="step-content-txt"><h4>${stepData.label}</h4><p>${stepData.desc}</p><div class="ux-note">${stepData.note}</div></div>`;
+      sc.appendChild(div);
+    });
+  }
+
+  function selectProto(id) {
+    currentProto = id;
+    currentStep = 0;
+    document
+      .querySelectorAll(".proto-card")
+      .forEach((c) => c.classList.remove("sel"));
+    document.getElementById("pc-" + id).classList.add("sel");
+    renderProto();
+  }
+
+  function nextStep() {
+    const total = stepsData[currentProto].length;
+    if (currentStep < total - 1) {
+      currentStep++;
+      renderProto();
+    }
+  }
+  function prevStep() {
+    if (currentStep > 0) {
+      currentStep--;
+      renderProto();
+    }
+  }
+
+  renderProto();
+</script>
